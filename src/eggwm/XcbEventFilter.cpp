@@ -1,7 +1,9 @@
 #include "XcbEventFilter.h"
 
 bool XcbEventFilter::nativeEventFilter(const QByteArray &eventType, void *message, long *)
-{                                                                              
+{
+    (void)eventType;
+
     if (eventFactory == NULL)
         return false;
 

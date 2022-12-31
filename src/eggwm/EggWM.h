@@ -86,6 +86,12 @@ class EggWM : public QApplication {
          */
         void attachEventHandler();
 
+        /**
+         * @~english
+         * return true if another WM exists
+         */
+        bool checkAnotherWM();
+
     public:
 
         /**

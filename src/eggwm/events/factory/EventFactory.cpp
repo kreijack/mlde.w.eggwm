@@ -35,7 +35,6 @@ EventFactory* EventFactory::getInstance() {
 // ************************************************************************** //
 
 void EventFactory::initialize(XWindowList* windowList) {
-#if QT_VERSION >= 0x050000
     this->eventHandlerHash.insert(XCB_MAP_REQUEST, new MapRequestHandler(windowList));
     this->eventHandlerHash.insert(XCB_CONFIGURE_REQUEST, new ConfigureRequestHandler(windowList));
     this->eventHandlerHash.insert(XCB_CREATE_NOTIFY, new CreateNotifyHandler(windowList));
@@ -43,41 +42,6 @@ void EventFactory::initialize(XWindowList* windowList) {
     this->eventHandlerHash.insert(XCB_UNMAP_NOTIFY, new UnmapNotifyHandler(windowList));
     this->eventHandlerHash.insert(XCB_BUTTON_PRESS, new ButtonPressHandler(windowList));
     this->eventHandlerHash.insert(XCB_CLIENT_MESSAGE, new ClientMessageHandler(windowList));
-#else
-    // MapRequest
-    this->eventHandlerHash.insert(MapRequest, new MapRequestHandler(
-            windowList));
-
-    // ConfigureRequest
-    this->eventHandlerHash.insert(ConfigureRequest,new ConfigureRequestHandler(
-            windowList));
-
-    //--------------------------------------------------------------------------
-
-    // CreateNotify
-    this->eventHandlerHash.insert(CreateNotify, new CreateNotifyHandler(
-            windowList));
-
-    // DestroyNotify
-    this->eventHandlerHash.insert(DestroyNotify, new DestroyNotifyHandler(
-            windowList));
-
-    // UnmapNotify
-    this->eventHandlerHash.insert(UnmapNotify, new UnmapNotifyHandler(
-            windowList));
-
-    //--------------------------------------------------------------------------
-
-    // ButtonPress
-    this->eventHandlerHash.insert(ButtonPress, new ButtonPressHandler(
-            windowList));
-
-    //--------------------------------------------------------------------------
-
-    // ClientMessage
-    this->eventHandlerHash.insert(ClientMessage, new ClientMessageHandler(
-            windowList));
-#endif
 }
 
 EventHandler* EventFactory::getEventHandler(int eventType) const {

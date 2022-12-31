@@ -28,39 +28,15 @@ CreateNotifyHandler::CreateNotifyHandler(XWindowList* wl)
 // **********                    PUBLIC METHODS                    ********** //
 // ************************************************************************** //
 
-bool CreateNotifyHandler::processEvent(XEvent* event) {
-    Window windowID = event->xcreatewindow.window;
-    qDebug() << "[+] CreateNotify event 0x" << hex << windowID;
-
-    // Si la ventana no es un marco
-    if(!this->wl->existFrame(windowID)) {
-        qDebug() << "\tLa ventana es un cliente";
-        XWindow* xwindow = new XWindow(windowID);
-
-        qDebug() << "\tAñadiendo el cliente a la lista";
-        this->wl->addClient(windowID, xwindow);
-
-        return false;
-
-    // Si la ventana es un marco
-    } else {
-        // Podemos saber que la ventana es un marco en el momento de crearla
-        // porque el marco se añade en MapRequestHandler, guardando su ID en la
-        // lista
-        qDebug() << "\tLa ventana es un marco";
-        return false;
-    }
-}
-
-#if QT_VERSION >= 0x050000
 bool CreateNotifyHandler::processEvent(xcb_generic_event_t* event) 
 {
     xcb_create_notify_event_t* create = reinterpret_cast<xcb_create_notify_event_t*>(event);
     Window windowID = create->window;
+    //qDebug() << "[+] CreateNotify event 0x" << hex << windowID;
     if (!this->wl->existFrame(windowID)) {
         XWindow* xwindow = new XWindow(windowID);
         this->wl->addClient(windowID, xwindow);
     }  
     return false;
 }
-#endif
+

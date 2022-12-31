@@ -25,6 +25,9 @@
  * @param argv Argument list.
  */
 int main(int argc, char** argv) {
+#if QT_VERSION < 0x050000
+    assert("Required QT 5" == nullptr);
+#endif
     EggWM eggWM(argc, argv);
     return eggWM.exec();
 }

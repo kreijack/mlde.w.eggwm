@@ -49,10 +49,9 @@ EggWM::EggWM(int argc, char** argv) : QApplication(argc, argv) {
             | ButtonPressMask);        /* ButtonPress */
     XFlush(QX11Info::display());
 
-#if QT_VERSION >= 0x050000
     myXEv.setWindowList(this->windowList);
     installNativeEventFilter(&myXEv);
-#endif
+
 }
 
 EggWM::~EggWM() {
@@ -81,18 +80,4 @@ void EggWM::sendHints() {
             (long)QApplication::desktop()->height());
     ewmhRoot.sendCurrentDesktop(0.0);
     ewmhRoot.sendSupportShowingdesktop(0.0);
-}
-
-
-// ************************************************************************** //
-// **********                   PROTECTED METHODS                  ********** //
-// ************************************************************************** //
-
-bool EggWM::x11EventFilter(XEvent* event) {
-    EventHandler* handler = this->eventFactory->getEventHandler(event->type);
-
-    if(handler != NULL)
-        return handler->processEvent(event);
-    else
-        return false;
 }

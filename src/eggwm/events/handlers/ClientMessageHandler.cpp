@@ -28,78 +28,11 @@ ClientMessageHandler::ClientMessageHandler(XWindowList* wl)
 // **********                    PUBLIC METHODS                    ********** //
 // ************************************************************************** //
 
-bool ClientMessageHandler::processEvent(XEvent* event) {
-    Window windowID = event->xclient.window;
-    qDebug() << "[+] ClientMessage event 0x" << hex << windowID;
-    AtomList* al = AtomList::getInstance();
-
-    qDebug() << "\tPropiedad a cambiar: " << XGetAtomName(
-            QX11Info::display(), event->xclient.message_type);
-
-    // Si la ventana es un cliente
-    if(this->wl->existClient(windowID)) {
-        qDebug() << "\tLa ventana es un cliente";
-        XWindow* xwindow = this->wl->getXWindowByClientID(windowID);
-
-        //----------------------------------------------------------------------
-
-        // ICCCM
-
-        if(event->xclient.message_type == al->getAtom("WM_CHANGE_STATE")
-                        && event->xclient.format == 32
-                        && event->xclient.data.l[0] == IconicState) {
-                    qDebug() << "\tSe solicita minimizar el cliente";
-                    xwindow->setState(IconicState);
-                    return true;
-
-
-        //----------------------------------------------------------------------
-
-        // EWMH
-
-        } else if(event->xclient.message_type
-                == al->getAtom("_NET_ACTIVE_WINDOW")) {
-            EWMHRoot ewmh;
-            ewmh.receivedActiveWindow(this->wl, xwindow);
-
-        } else if(event->xclient.message_type
-                == al->getAtom("_NET_CLOSE_WINDOW")) {
-            EWMHRoot ewmh;
-            ewmh.receivedCloseWindow(xwindow);
-        }
-
-
-        // TODO Se debería recibir _NET_WM_USER_TIME para poder hacer activas
-        //      las ventanas al clickar en cualquier parte, no solo en el marco,
-        //      pero no se recibe :(
-
-        return false;
-
-    // Si la ventana es un marco
-    } else if(wl->existFrame(windowID)) {
-        qDebug() << "\tLa ventana es un marco";
-
-        // XdndLeave
-        // XdndEnter
-        // XdndPosition
-
-        return false;
-
-    // Si no es ni un marco ni un cliente
-    } else {
-        qDebug() << "\tLa ventana no es ni un cliente ni un marco";
-
-        // _NET_SHOWING_DESKTOP
-
-        return false;
-    }
-}
-
-#if QT_VERSION >= 0x050000
 bool ClientMessageHandler::processEvent(xcb_generic_event_t* event) 
 {
     xcb_client_message_event_t* client = reinterpret_cast<xcb_client_message_event_t*>(event);
     Window windowID = client->window;
+    //qDebug() << "[+] ClientMessage event 0x" << hex << windowID;
     AtomList* al = AtomList::getInstance();
     if (this->wl->existClient(windowID)) {
         XWindow* xwindow = this->wl->getXWindowByClientID(windowID);
@@ -117,4 +50,3 @@ bool ClientMessageHandler::processEvent(xcb_generic_event_t* event)
     }
     return false;
 }
-#endif

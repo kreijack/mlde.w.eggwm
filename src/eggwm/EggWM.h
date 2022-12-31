@@ -22,7 +22,6 @@
 #include "src/eggwm/standards/WMCheckWindow.h"
 #include "src/eggwm/events/factory/EventFactory.h"
 
-#if QT_VERSION >= 0x050000                                                         
 class MyXcbEventFilter : public QAbstractNativeEventFilter                         
 {                                                                                  
 public:
@@ -44,7 +43,6 @@ public:
 private:
     XWindowList* m_WindowList;
 };                                                                                 
-#endif
 
 /**
  * @~spanish
@@ -109,30 +107,6 @@ class EggWM : public QApplication {
          */
         void attachEventHandler();
 
-    protected:
-
-        /**
-         * @~spanish
-         * Reimplementa el método QApplication::x11EventFilter. En este método
-         * se recibirán todos los eventos que deberá gestionar el WM (previa
-         * llamada a XSelectInput en el constructor) y se gestionarán como
-         * corresponda, sirviendose de los distintos "handlers" de eventos.
-         * @param event El evento que se ha producido.
-         * @return true para evitar que el evento sea tratado con normalidad, es
-         *         decir, cuando ya lo tratamos nosotros, false para que el
-         *         evento se trate connormalidad.
-         *
-         * @~english
-         * Reimplement the method QApplication::x11EventFilter. In this method
-         * recives all events that will be managed by the WM (previously calling
-         * XSelectInput function in the constructor) and manage it as appropiate
-         * using the correct event handler.
-         * @param event The event that occurred.
-         * @return true if you want to stop the event from being processed, ie
-         *         when we treat ourselves, false for normal event dispatching.
-         */
-        virtual bool x11EventFilter(XEvent* event);
-
     public:
 
         /**
@@ -157,9 +131,7 @@ class EggWM : public QApplication {
          */
         virtual ~EggWM();
 
-#if QT_VERSION >= 0x050000
         MyXcbEventFilter myXEv;
-#endif
 };
 
 #endif // EGGWM_H

@@ -28,70 +28,11 @@ MapRequestHandler::MapRequestHandler(XWindowList* wl)
 // **********                    PUBLIC METHODS                    ********** //
 // ************************************************************************** //
 
-bool MapRequestHandler::processEvent(XEvent* event) {
-    Window windowID = event->xmaprequest.window;
-    qDebug() << "[+] MapRequest event 0x" << hex << windowID;
-
-    // Si la ventana es un cliente
-    if(this->wl->existClient(windowID)) {
-        qDebug() << "\tLa ventana es un cliente";
-        XWindow* xwindow = this->wl->getXWindowByClientID(windowID);
-
-        // Si el cliente bypassea el WM
-        if(xwindow->bypassWM()) {
-            qDebug() << "\tEl cliente bypassea el WM";
-            return false;
-
-        // Si no lo bypassea
-        } else {
-
-            // Si la ventana se mapea por primera vez
-            if(xwindow->getState() == WithdrawnState) {
-                qDebug() << "\tEl cliente se mapea por primera vez";
-
-                if(xwindow->needFrame()) {
-                    qDebug() << "\tAñadiendo un marco al cliente";
-                    xwindow->addFrame();
-
-                    // No hace falta añadir el cliente a la lista por que ya se
-                    // añadió en CreateNotifyHandler
-
-                    qDebug() << "\tAñadiendo el marco (0x" << hex
-                             << xwindow->getFrameID() << ") a la lista";
-                    wl->addFrame(xwindow->getFrameID(), xwindow);
-                } else
-                    qDebug() << "\tEl cliente no necesita marco";
-
-                qDebug() << "\tMapeando la ventana";
-                xwindow->setState(NormalState);
-
-                qDebug() << "\tAñadiendo la ventana de la lista del EWMH";
-                this->wl->addToManagedWindows(xwindow);
-
-                qDebug() << "\tActualizando la ventana activa";
-                this->wl->setActiveWindow(this->wl->getTopWindow());
-            }
-
-            return true;
-        }
-
-    // Si la ventana es un marco
-    } else if(this->wl->existFrame(windowID)) {
-        qDebug() << "\tLa ventana es un marco";
-        return false;
-
-    // Si no se ni un marco ni un cliente
-    } else {
-        qDebug() << "\tLa ventana no es ni un cliente ni un marco";
-        return false;
-    }
-}
-
-#if QT_VERSION >= 0x050000
 bool MapRequestHandler::processEvent(xcb_generic_event_t* event) 
 {
     xcb_map_request_event_t* map = reinterpret_cast<xcb_map_request_event_t*>(event);
     Window windowID = map->window;
+    //qDebug() << "[+] MapRequest event 0x" << hex << windowID;
     if (this->wl->existClient(windowID)) {
         XWindow* xwindow = this->wl->getXWindowByClientID(windowID);
         if(xwindow->bypassWM()) return false;
@@ -110,4 +51,3 @@ bool MapRequestHandler::processEvent(xcb_generic_event_t* event)
     }
     return false;
 }
-#endif

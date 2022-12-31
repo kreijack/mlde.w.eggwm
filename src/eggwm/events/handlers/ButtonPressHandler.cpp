@@ -28,35 +28,11 @@ ButtonPressHandler::ButtonPressHandler(XWindowList* wl)
 // **********                    PUBLIC METHODS                    ********** //
 // ************************************************************************** //
 
-bool ButtonPressHandler::processEvent(XEvent* event) {
-    Window windowID = event->xbutton.window;
-    qDebug() << "[+] ButtonPress event 0x" << hex << windowID;
-
-    // Si la ventana es un marco
-    if(this->wl->existFrame(windowID)) {
-        qDebug() << "\tLa ventana es un marco";
-        XWindow* xwindow = wl->getXWindowByFrameID(windowID);
-
-        qDebug() << "\tModificando la lista del EWMH";
-        this->wl->restackManagedWindow(xwindow);
-
-        qDebug() << "\tActualizando la ventana activa";
-        this->wl->setActiveWindow(xwindow);
-
-        return false;
-
-    // Si la ventana no es un marco
-    } else {
-        qDebug() << "\tLa ventana no es un marco";
-        return false;
-    }
-}
-
-#if QT_VERSION >= 0x050000
 bool ButtonPressHandler::processEvent(xcb_generic_event_t* event) 
 {
     xcb_button_press_event_t* button = reinterpret_cast<xcb_button_press_event_t*>(event);
     Window windowID = button->root;
+    //qDebug() << "[+] ButtonPress event 0x" << hex << windowID;
     if (this->wl->existFrame(windowID)) {
         XWindow* xwindow = wl->getXWindowByFrameID(windowID);
         this->wl->restackManagedWindow(xwindow);
@@ -64,4 +40,3 @@ bool ButtonPressHandler::processEvent(xcb_generic_event_t* event)
     }
     return false;
 }
-#endif

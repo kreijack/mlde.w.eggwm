@@ -145,5 +145,5 @@ AtomList::AtomList() {
 // ************************************************************************** //
 
 Atom AtomList::getAtom(const char* atomName) {
-    return this->atomHash->value(atomName, NULL);
+    return this->atomHash->value(atomName, 0);
 }

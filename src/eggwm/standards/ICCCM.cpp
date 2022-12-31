@@ -88,7 +88,7 @@ void ICCCM::sendProtocol(const char* protocol) const {
     event.xclient.data.l[0]    = XInternAtom(QX11Info::display(), protocol,
             false);
     event.xclient.data.l[1]    = CurrentTime;
-    XSendEvent(QX11Info::display(), this->clientID, false, NULL, &event);
+    XSendEvent(QX11Info::display(), this->clientID, false, 0, &event);
 }
 
 

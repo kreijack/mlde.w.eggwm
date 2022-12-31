@@ -49,8 +49,8 @@ EggWM::EggWM(int argc, char** argv) : QApplication(argc, argv) {
             | ButtonPressMask);        /* ButtonPress */
     XFlush(QX11Info::display());
 
-    myXEv.setWindowList(this->windowList);
-    installNativeEventFilter(&myXEv);
+    xev = new XcbEventFilter(this->eventFactory);
+    installNativeEventFilter(xev);
 
 }
 

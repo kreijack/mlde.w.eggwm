@@ -1,6 +1,8 @@
 SOURCES += src/eggwm/Main.cpp \
-    src/eggwm/EggWM.cpp
-HEADERS += src/eggwm/EggWM.h
+    src/eggwm/EggWM.cpp \
+    src/eggwm/XcbEventFilter.cpp
+HEADERS += src/eggwm/EggWM.h \
+    src/eggwm/XcbEventFilter.h
 
 include(util/util.pri)
 include(events/handlers/handlers.pri)

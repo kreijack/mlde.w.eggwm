@@ -19,3 +19,10 @@
 *.exe
 *.out
 *.app
+
+# other
+.qmake.stash
+Makefile
+build/
+eggwm
+

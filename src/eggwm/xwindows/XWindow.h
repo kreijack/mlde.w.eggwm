@@ -112,7 +112,7 @@ class XWindow : public QObject {
          * @~english
          * TO TRANSLATE
          */
-        XWindow(const Window& clientID, XWindowList *wl);
+        XWindow(const Window& clientID);
 
         /**
          * @~spanish

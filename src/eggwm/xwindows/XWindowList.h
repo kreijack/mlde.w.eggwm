@@ -113,8 +113,6 @@ class XWindowList {
          */
         void restackWindows() const;
 
-    public:
-
         /**
          * @~spanish
          * Crea una lista de ventanas vacía.
@@ -123,6 +121,14 @@ class XWindowList {
          * TO TRANSLATE
          */
         XWindowList();
+
+    public:
+
+        /**
+         * @~english
+         * Get the instance of this class
+         */
+        static XWindowList *getInstance();
 
         /**
          * @~spanish

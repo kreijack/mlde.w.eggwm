@@ -197,9 +197,9 @@ EggWM::EggWM(int argc, char** argv) : QApplication(argc, argv) {
 
     // Inicializamos los atributos
     this->wmCheckWindow = new WMCheckWindow;
-    this->windowList    = new XWindowList;
+    this->windowList    = XWindowList::getInstance();
     this->eventFactory  = EventFactory::getInstance();
-    this->eventFactory->initialize(this->windowList);
+    this->eventFactory->initialize();
 
     // cargamos la configuración
     Config* cfg = Config::getInstance();

@@ -20,8 +20,7 @@
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-DestroyNotifyHandler::DestroyNotifyHandler(XWindowList* wl)
-        : EventHandler(wl) {}
+DestroyNotifyHandler::DestroyNotifyHandler() {}
 
 
 // ************************************************************************** //

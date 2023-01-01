@@ -34,13 +34,11 @@ class DestroyNotifyHandler : public EventHandler {
         /**
          * @~spanish
          * Constructora por defecto.
-         * @param wl La lista de ventanas.
          *
          * @~english
          * Default constructor.
-         * @param wl The window list.
          */
-        DestroyNotifyHandler(XWindowList* wl);
+        DestroyNotifyHandler();
 
         /**
          * @~spanish

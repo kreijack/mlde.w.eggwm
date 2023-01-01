@@ -34,14 +34,14 @@ EventFactory* EventFactory::getInstance() {
 // **********                    PUBLIC METHODS                    ********** //
 // ************************************************************************** //
 
-void EventFactory::initialize(XWindowList* windowList) {
-    this->eventHandlerHash.insert(XCB_MAP_REQUEST, new MapRequestHandler(windowList));
-    this->eventHandlerHash.insert(XCB_CONFIGURE_REQUEST, new ConfigureRequestHandler(windowList));
-    this->eventHandlerHash.insert(XCB_CREATE_NOTIFY, new CreateNotifyHandler(windowList));
-    this->eventHandlerHash.insert(XCB_DESTROY_NOTIFY, new DestroyNotifyHandler(windowList));
-    this->eventHandlerHash.insert(XCB_UNMAP_NOTIFY, new UnmapNotifyHandler(windowList));
-    this->eventHandlerHash.insert(XCB_BUTTON_PRESS, new ButtonPressHandler(windowList));
-    this->eventHandlerHash.insert(XCB_CLIENT_MESSAGE, new ClientMessageHandler(windowList));
+void EventFactory::initialize() {
+    this->eventHandlerHash.insert(XCB_MAP_REQUEST, new MapRequestHandler());
+    this->eventHandlerHash.insert(XCB_CONFIGURE_REQUEST, new ConfigureRequestHandler());
+    this->eventHandlerHash.insert(XCB_CREATE_NOTIFY, new CreateNotifyHandler());
+    this->eventHandlerHash.insert(XCB_DESTROY_NOTIFY, new DestroyNotifyHandler());
+    this->eventHandlerHash.insert(XCB_UNMAP_NOTIFY, new UnmapNotifyHandler());
+    this->eventHandlerHash.insert(XCB_BUTTON_PRESS, new ButtonPressHandler());
+    this->eventHandlerHash.insert(XCB_CLIENT_MESSAGE, new ClientMessageHandler());
 }
 
 EventHandler* EventFactory::getEventHandler(int eventType) const {

@@ -48,15 +48,11 @@ class EventHandler {
         /**
          * @~spanish
          * Constructora por defecto.
-         * @param wl La lista de ventanas.
          *
          * @~english
          * Default constructor.
-         * @param wl The window list.
          */
-        EventHandler(XWindowList* wl) {
-            this->wl = wl;
-        }
+        EventHandler() : wl(XWindowList::getInstance()) {}
 
         /**
          * @~spanish

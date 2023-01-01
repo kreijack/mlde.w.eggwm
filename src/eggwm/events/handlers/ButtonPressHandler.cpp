@@ -20,8 +20,7 @@
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-ButtonPressHandler::ButtonPressHandler(XWindowList* wl)
-        : EventHandler(wl) {}
+ButtonPressHandler::ButtonPressHandler() {}
 
 
 // ************************************************************************** //

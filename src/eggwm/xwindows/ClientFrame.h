@@ -271,12 +271,11 @@ class ClientFrame : public QWidget {
          * @param showIcon      Si el icono es visible o no.
          * @param showMaxButton Si el botón maximizar es visible o no.
          * @param xw            related xwindow
-         * @param wl            windows list
          * @param parent        Ventana padre.
          * @~english
          * TO TRANSLATE
          */
-        ClientFrame(bool showIcon, bool showMaxButton, XWindow *xw, XWindowList *wl, QWidget* parent = 0);
+        ClientFrame(bool showIcon, bool showMaxButton, XWindow *xw, QWidget* parent = 0);
 
         /**
          * @~spanish

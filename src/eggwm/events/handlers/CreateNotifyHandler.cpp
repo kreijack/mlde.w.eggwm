@@ -20,8 +20,7 @@
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-CreateNotifyHandler::CreateNotifyHandler(XWindowList* wl)
-        : EventHandler(wl) {}
+CreateNotifyHandler::CreateNotifyHandler() {}
 
 
 // ************************************************************************** //
@@ -34,7 +33,7 @@ bool CreateNotifyHandler::processEvent(xcb_generic_event_t* event)
     Window windowID = create->window;
     //qDebug() << "[+] CreateNotify event 0x" << hex << windowID;
     if (!this->wl->existFrame(windowID)) {
-        XWindow* xwindow = new XWindow(windowID, wl);
+        XWindow* xwindow = new XWindow(windowID);
         this->wl->addClient(windowID, xwindow);
     }  
     return false;

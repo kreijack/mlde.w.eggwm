@@ -20,8 +20,7 @@
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-UnmapNotifyHandler::UnmapNotifyHandler(XWindowList* wl)
-        : EventHandler(wl) {}
+UnmapNotifyHandler::UnmapNotifyHandler() {}
 
 
 // ************************************************************************** //

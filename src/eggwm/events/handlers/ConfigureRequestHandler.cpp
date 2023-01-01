@@ -20,8 +20,7 @@
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-ConfigureRequestHandler::ConfigureRequestHandler(XWindowList* wl)
-        : EventHandler(wl) {}
+ConfigureRequestHandler::ConfigureRequestHandler() {}
 
 
 // ************************************************************************** //

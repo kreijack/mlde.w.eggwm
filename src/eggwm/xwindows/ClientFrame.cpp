@@ -32,8 +32,8 @@ const int ClientFrame::RIGHT_BORDER  = (1<<4);
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-ClientFrame::ClientFrame(bool showIcon, bool showMaxButton, XWindow *xw, XWindowList *wl, QWidget* parent)
-        : wl(wl), xw(xw), QWidget(parent) {
+ClientFrame::ClientFrame(bool showIcon, bool showMaxButton, XWindow *xw, QWidget* parent)
+        : wl(XWindowList::getInstance()), xw(xw), QWidget(parent) {
     Config* cfg = Config::getInstance();
 
     // Inicializamos los atributos

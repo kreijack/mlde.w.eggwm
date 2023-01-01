@@ -20,8 +20,7 @@
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-ClientMessageHandler::ClientMessageHandler(XWindowList* wl)
-        : EventHandler(wl) {}
+ClientMessageHandler::ClientMessageHandler() {}
 
 
 // ************************************************************************** //

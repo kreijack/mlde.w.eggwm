@@ -181,3 +181,8 @@ const XWindow* XWindowList::getTopWindow() const {
 
     return ret;
 }
+
+XWindowList *XWindowList::getInstance() {
+    static XWindowList theXWindowList;
+    return &theXWindowList;
+}

@@ -13,13 +13,14 @@
  * @author José Expósito
  */
 #include "XWindow.h"
+#include "XWindowList.h"
 
 // ************************************************************************** //
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-XWindow::XWindow(const Window& clientID, XWindowList *wl) {
-    this->wl       = wl;
+XWindow::XWindow(const Window& clientID) {
+    this->wl       = XWindowList::getInstance();
     this->client   = new Client(clientID);
     this->frame    = NULL;
     this->clientID = clientID;
@@ -54,7 +55,7 @@ void XWindow::addFrame() {
         Config* cfg = Config::getInstance();
 
         // Creamos el marco con la posición y tamaño necesarios
-        this->frame = new ClientFrame(cfg->isIconVisible(), true, this, this->wl);
+        this->frame = new ClientFrame(cfg->isIconVisible(), true, this);
         this->setX(this->client->getX());
         this->setY(this->client->getY());
         this->setWidth(this->client->getWidth() + cfg->getLeftBorderWidth()

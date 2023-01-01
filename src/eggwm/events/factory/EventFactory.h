@@ -83,13 +83,11 @@ class EventFactory {
         /**
          * @~spanish
          * Inicializa la factoría de eventos.
-         * @param windowList Lista de ventanas que usarán los handlers.
          *
          * @~english
          * Initializes the event factory.
-         * @param windowList Window list that will use the event handlers.
          */
-        void initialize(XWindowList* windowList);
+        void initialize();
 
         /**
          * @~spanish

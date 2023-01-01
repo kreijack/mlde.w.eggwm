@@ -20,8 +20,7 @@
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-MapRequestHandler::MapRequestHandler(XWindowList* wl)
-        : EventHandler(wl) {}
+MapRequestHandler::MapRequestHandler() {}
 
 
 // ************************************************************************** //

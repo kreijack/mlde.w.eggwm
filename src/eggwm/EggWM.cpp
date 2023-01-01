@@ -201,8 +201,6 @@ EggWM::EggWM(int argc, char** argv) : QApplication(argc, argv) {
     // Inicializamos los atributos
     this->wmCheckWindow = new WMCheckWindow;
     this->windowList    = XWindowList::getInstance();
-    this->eventFactory  = EventFactory::getInstance();
-    this->eventFactory->initialize();
 
     // cargamos la configuración
     Config* cfg = Config::getInstance();
@@ -227,7 +225,7 @@ EggWM::EggWM(int argc, char** argv) : QApplication(argc, argv) {
             | ButtonPressMask);        /* ButtonPress */
     XFlush(QX11Info::display());
 
-    xev = new XcbEventFilter(this->eventFactory);
+    xev = new XcbEventFilter(this->windowList);
     installNativeEventFilter(xev);
 
 }

@@ -20,8 +20,7 @@
 #include "src/eggwm/util/Include.h"
 #include "src/eggwm/standards/EWMHRoot.h"
 #include "src/eggwm/standards/WMCheckWindow.h"
-#include "src/eggwm/events/factory/EventFactory.h"
-#include "src/eggwm/XcbEventFilter.h"
+#include "src/eggwm/events/XcbEventFilter.h"
 
 #include <QLocalServer>
 
@@ -56,15 +55,6 @@ class EggWM : public QApplication {
          * List of windows managed by the WM.
          */
         XWindowList* windowList;
-
-        /**
-         * @~spanish
-         * Factoría de eventos.
-         *
-         * @~english
-         * Event factory.
-         */
-        EventFactory* eventFactory;
 
         /**
          * @~english

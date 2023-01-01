@@ -17,6 +17,7 @@
 #include "EggWM.h"
 
 #include <QLocalSocket>
+#include <QTimer>
 
 // ************************************************************************** //
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
@@ -209,7 +210,7 @@ EggWM::EggWM(int argc, char** argv) : QApplication(argc, argv) {
 
     socketServerSetup();
     // TODO Añadir a la lista de ventanas las ventanas que ya existan
-
+    reparentOrphans();
 
     // Establecemos diversas propiedades requeridas por el estándar EWMH
     this->sendHints();
@@ -300,8 +301,12 @@ void EggWM::socketServerReceiveCommand() {
         /* empty */;
 
     data[i] = 0;
-    qDebug() << "received command: '" << data << "'";
+    //qDebug() << "received command: '" << data << "'";
     if (!strcmp(data, "ping")) {
+        auto a = "  pong\n0:OK\n";
+        clientConnection->write(a, strlen(a));
+    } else if (!strcmp(data, "reparent-orphans")) {
+        reparentOrphans();
         auto a = "  pong\n0:OK\n";
         clientConnection->write(a, strlen(a));
     } else if (!strcmp(data, "reload-config")) {
@@ -315,4 +320,69 @@ void EggWM::socketServerReceiveCommand() {
     }
     clientConnection->flush();
     clientConnection->disconnectFromServer();
+}
+
+void EggWM::reparentOrphans() {
+    Window root, parent;
+    Window* windows;
+    unsigned int windows_count;
+
+    QList<Window> x11WindowsList;
+
+    XGrabServer(QX11Info::display());
+    XQueryTree(QX11Info::display(),
+            QX11Info::appRootWindow(QX11Info::appScreen()),
+            &root,
+            &parent,
+            &windows,
+            &windows_count);
+    assert(root == QX11Info::appRootWindow(QX11Info::appScreen()));
+
+    for (unsigned int i = 0; i < windows_count; ++i) {
+        auto windowID = windows[i];
+
+        XWindowAttributes attrs;
+        XGetWindowAttributes(QX11Info::display(), windowID, &attrs);
+
+        if (attrs.override_redirect || attrs.map_state != IsViewable)
+            continue;
+
+        if (this->windowList->existClient(windowID))
+            continue;
+
+        XWindow* xwindow = new XWindow(windowID);
+        this->windowList->addClient(windowID, xwindow);
+        if (xwindow->bypassWM())
+            continue;
+
+        assert(xwindow->getState() == WithdrawnState);
+
+        if (xwindow->needFrame()) {
+            xwindow->addFrame();
+            this->windowList->addFrame(xwindow->getFrameID(),
+                                    xwindow);
+        }
+
+        xwindow->setState(NormalState);
+
+        this->windowList->addToManagedWindows(xwindow);
+        this->windowList->setActiveWindow(this->windowList->getTopWindow());
+
+        x11WindowsList.append(windowID);
+    }
+
+    XFree(windows);
+    XUngrabServer(QX11Info::display());
+    XSync(QX11Info::display(), true);
+
+    // defer the refresh after processing the pending events
+    // otherwise the system is confused by spurious XUnmapEvent
+    QTimer::singleShot(500, [x11WindowsList](){
+            auto wl = XWindowList::getInstance();
+            for (auto wid : x11WindowsList) {
+                auto w = wl->getXWindowByClientID(wid);
+                if (w)
+                    w->setState(NormalState);
+            }
+    });
 }

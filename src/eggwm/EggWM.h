@@ -107,6 +107,8 @@ class EggWM : public QApplication {
          */
         void socketServerSetup();
 
+        void reparentOrphans();
+
     private slots:
         /**
          * @~english

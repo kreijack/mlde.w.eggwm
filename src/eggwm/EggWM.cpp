@@ -326,8 +326,12 @@ void EggWM::reparentOrphans() {
     Window root, parent;
     Window* windows;
     unsigned int windows_count;
+    struct x11window {
+        Window  id;
+        int x, y, w, h;
+    };
 
-    QList<Window> x11WindowsList;
+    QList<x11window> x11windowsList;
 
     XGrabServer(QX11Info::display());
     XQueryTree(QX11Info::display(),
@@ -368,7 +372,13 @@ void EggWM::reparentOrphans() {
         this->windowList->addToManagedWindows(xwindow);
         this->windowList->setActiveWindow(this->windowList->getTopWindow());
 
-        x11WindowsList.append(windowID);
+        x11windowsList.append({
+            .id =   windowID,
+            .x =    attrs.x,
+            .y =    attrs.y,
+            .w =    attrs.width,
+            .h =    attrs.height
+        });
     }
 
     XFree(windows);
@@ -377,12 +387,21 @@ void EggWM::reparentOrphans() {
 
     // defer the refresh after processing the pending events
     // otherwise the system is confused by spurious XUnmapEvent
-    QTimer::singleShot(500, [x11WindowsList](){
-            auto wl = XWindowList::getInstance();
-            for (auto wid : x11WindowsList) {
-                auto w = wl->getXWindowByClientID(wid);
-                if (w)
-                    w->setState(NormalState);
-            }
+    QTimer::singleShot(500, [x11windowsList](){
+        auto wl = XWindowList::getInstance();
+
+        for (auto x11w : x11windowsList) {
+            auto w = wl->getXWindowByClientID(x11w.id);
+            if (!w)
+                continue;
+            w->setState(NormalState);
+            w->setX(x11w.x);
+            w->setY(x11w.y);
+            w->setWidth(x11w.w);
+            w->setHeight(x11w.h);
+            wl->addToManagedWindows(w);
+        }
+
+        wl->setActiveWindow(wl->getTopWindow());
     });
 }

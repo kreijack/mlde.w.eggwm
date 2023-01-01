@@ -18,7 +18,8 @@
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-XWindow::XWindow(const Window& clientID) {
+XWindow::XWindow(const Window& clientID, XWindowList *wl) {
+    this->wl       = wl;
     this->client   = new Client(clientID);
     this->frame    = NULL;
     this->clientID = clientID;
@@ -53,7 +54,7 @@ void XWindow::addFrame() {
         Config* cfg = Config::getInstance();
 
         // Creamos el marco con la posición y tamaño necesarios
-        this->frame = new ClientFrame(cfg->isIconVisible(), true);
+        this->frame = new ClientFrame(cfg->isIconVisible(), true, this, this->wl);
         this->setX(this->client->getX());
         this->setY(this->client->getY());
         this->setWidth(this->client->getWidth() + cfg->getLeftBorderWidth()
@@ -250,8 +251,11 @@ XID XWindow::getWindowGroup() const {
 
 //------------------------------------------------------------------------------
 
-void XWindow::setFocus() const {
-    this->client->setFocus();
+void XWindow::setFocus(bool focus) const {
+    if (focus)
+        this->client->setFocus();
+    if (this->haveFrame())
+        this->frame->setFocus(focus);
 }
 
 //------------------------------------------------------------------------------

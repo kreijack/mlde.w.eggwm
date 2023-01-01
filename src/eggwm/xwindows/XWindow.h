@@ -21,6 +21,8 @@
 #include "src/eggwm/atoms/AtomList.h"
 
 
+class XWindowList;
+
 /**
  * @~spanish
  * Representa las ventanas gestionadas o no por el WM.
@@ -94,6 +96,12 @@ class XWindow : public QObject {
          */
         int state;
 
+        /**
+         * @~english
+         * Pointer to the windows list
+         */
+        XWindowList     *wl;
+
     public:
 
         /**
@@ -104,7 +112,7 @@ class XWindow : public QObject {
          * @~english
          * TO TRANSLATE
          */
-        XWindow(const Window& clientID);
+        XWindow(const Window& clientID, XWindowList *wl);
 
         /**
          * @~spanish
@@ -240,9 +248,9 @@ class XWindow : public QObject {
          * Asigna el foco a la ventana en caso de que el cliente lo requiera.
          *
          * @~english
-         * TO TRANSLATE
+         * (un)set the focus to teh window
          */
-        void setFocus() const;
+        void setFocus(bool focus) const;
 
         //----------------------------------------------------------------------
 

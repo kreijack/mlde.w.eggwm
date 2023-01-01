@@ -35,6 +35,7 @@ const char* Config::THEMES_PATH          = "/.eggwm/themes/";
 
 const char* Config::THEME_INFO           = "/theme.inf";
 const char* Config::STYLE_QSS            = "/style.qss";
+const char* Config::FOCUSED_STYLE_QSS    = "/focused_style.qss";
 
 //------------------------------------------------------------------------------
 
@@ -150,6 +151,19 @@ void Config::loadConfig() {
     style = qss.readAll();
     style.replace("%theme_path%", QDir::homePath()+THEMES_PATH+folderThemeName);
     qss.close();
+
+    themeStylePath = QDir::homePath() + THEMES_PATH + folderThemeName
+            + FOCUSED_STYLE_QSS;
+    qss.setFileName(themeStylePath);
+    if (qss.exists()) {
+        qss.open(QFile::ReadOnly);
+        focusedStyle = qss.readAll();
+        focusedStyle.replace("%theme_path%", QDir::homePath()+THEMES_PATH+folderThemeName);
+        qss.close();
+    }
+    // focusedStyle extends the "default" style
+    focusedStyle = style + focusedStyle;
+
 }
 
 
@@ -280,4 +294,8 @@ Config::Aling Config::getExitButtonAling() const {
 
 QString Config::getStyle() const {
     return this->style;
+}
+
+QString Config::getFocusedStyle() const {
+    return this->focusedStyle;
 }

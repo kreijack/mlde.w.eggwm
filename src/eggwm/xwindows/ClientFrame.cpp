@@ -14,6 +14,9 @@
  */
 #include "ClientFrame.h"
 
+#include "src/eggwm/xwindows/XWindowList.h"
+
+
 // ************************************************************************** //
 // **********             STATIC METHODS AND VARIABLES             ********** //
 // ************************************************************************** //
@@ -29,8 +32,8 @@ const int ClientFrame::RIGHT_BORDER  = (1<<4);
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-ClientFrame::ClientFrame(bool showIcon, bool showMaxButton, QWidget* parent)
-        : QWidget(parent) {
+ClientFrame::ClientFrame(bool showIcon, bool showMaxButton, XWindow *xw, XWindowList *wl, QWidget* parent)
+        : wl(wl), xw(xw), QWidget(parent) {
     Config* cfg = Config::getInstance();
 
     // Inicializamos los atributos
@@ -397,6 +400,8 @@ bool ClientFrame::isClicked(QPoint clickPosition, const QLabel* label) const {
 // ************************************************************************** //
 
 void ClientFrame::mousePressEvent(QMouseEvent* event) {
+    this->wl->restackManagedWindow(this->xw);
+    this->wl->setActiveWindow(this->xw);
     this->clickPosition =  event->pos();
 
     // Barra de título
@@ -540,4 +545,12 @@ void ClientFrame::setTitle(const QString& title) {
 void ClientFrame::setIconPixmap(const QPixmap& pixmap) {
     if(!pixmap.isNull())
         this->icon->setPixmap(pixmap);
+}
+
+void ClientFrame::setFocus(bool focus) {
+    Config* cfg = Config::getInstance();
+    if (focus)
+        this->setStyleSheet(cfg->getFocusedStyle());
+    else
+        this->setStyleSheet(cfg->getStyle());
 }

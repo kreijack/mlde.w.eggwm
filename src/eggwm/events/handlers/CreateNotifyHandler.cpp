@@ -34,7 +34,7 @@ bool CreateNotifyHandler::processEvent(xcb_generic_event_t* event)
     Window windowID = create->window;
     //qDebug() << "[+] CreateNotify event 0x" << hex << windowID;
     if (!this->wl->existFrame(windowID)) {
-        XWindow* xwindow = new XWindow(windowID);
+        XWindow* xwindow = new XWindow(windowID, wl);
         this->wl->addClient(windowID, xwindow);
     }  
     return false;

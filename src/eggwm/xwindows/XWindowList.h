@@ -16,9 +16,9 @@
 #define XWINDOWLIST_H
 
 #include "src/eggwm/util/Include.h"
-#include "src/eggwm/xwindows/XWindow.h"
 #include "src/eggwm/standards/EWMHRoot.h"
 
+class XWindow;
 
 /**
  * @~spanish

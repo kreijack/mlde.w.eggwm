@@ -57,6 +57,7 @@ class Config {
         // Nombre de los archivos que componen el tema de ventanas
         static const char* THEME_INFO;
         static const char* STYLE_QSS;
+        static const char* FOCUSED_STYLE_QSS;
 
         // Constantes para acceder a las propiedades del tema de ventana
         static const char* SHOW_ICON;
@@ -101,6 +102,7 @@ class Config {
         static Aling exitButtonAling;
 
         static QString style;
+        inline static QString focusedStyle;
 
         //----------------------------------------------------------------------
 
@@ -388,6 +390,13 @@ class Config {
          */
         QString getStyle() const;
 
+        /**
+         * @~english
+         * Returns the style that will be used to decorate a focused windows.
+         * It is based on the "default" style
+         * @return The style
+         */
+        QString getFocusedStyle() const;
 };
 
 #endif // CONFIG_H

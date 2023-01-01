@@ -18,6 +18,9 @@
 #include "src/eggwm/util/Include.h"
 #include "src/eggwm/config/Config.h"
 
+#undef Bool
+class XWindow;
+class XWindowList;
 
 /**
  * @~spanish
@@ -140,6 +143,18 @@ class ClientFrame : public QWidget {
         // Label con el icono de la ventana.
         QLabel* icon;
 
+        /**
+         * @~english
+         * Pointer to the xwindow
+         */
+        XWindow         *xw;
+
+        /**
+         * @~english
+         * Pointer to the windows list
+         */
+        XWindowList     *wl;
+
         //----------------------------------------------------------------------
 
         /**
@@ -255,12 +270,13 @@ class ClientFrame : public QWidget {
          * Crea un marco con las propiedades especificadas.
          * @param showIcon      Si el icono es visible o no.
          * @param showMaxButton Si el botón maximizar es visible o no.
+         * @param xw            related xwindow
+         * @param wl            windows list
          * @param parent        Ventana padre.
-         *
          * @~english
          * TO TRANSLATE
          */
-        ClientFrame(bool showIcon, bool showMaxButton, QWidget* parent = 0);
+        ClientFrame(bool showIcon, bool showMaxButton, XWindow *xw, XWindowList *wl, QWidget* parent = 0);
 
         /**
          * @~spanish
@@ -368,6 +384,12 @@ class ClientFrame : public QWidget {
          * TO TRANSLATE
          */
         void setIconPixmap(const QPixmap& pixmap);
+
+        /**
+         * @~english
+         * (uns)set the focus on the border
+         */
+        void setFocus(bool focus);
 
     signals:
 

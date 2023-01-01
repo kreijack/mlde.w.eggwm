@@ -149,6 +149,9 @@ void XWindowList::restackManagedWindow(const XWindow* xwindow) {
 }
 
 void XWindowList::setActiveWindow(const XWindow* activeWindow) {
+
+    if (this->activeWindow)
+        this->activeWindow->setFocus(false);
     this->activeWindow = (XWindow*)activeWindow;
 
     // TODO Si se quiere cambiar la decoración de la ventana activa este es el
@@ -159,7 +162,7 @@ void XWindowList::setActiveWindow(const XWindow* activeWindow) {
         ewmhRoot.sendActiveWindow(None);
     } else {
         ewmhRoot.sendActiveWindow(this->activeWindow->getClientID());
-        this->activeWindow->setFocus();
+        this->activeWindow->setFocus(true);
     }
 }
 

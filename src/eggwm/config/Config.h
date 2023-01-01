@@ -79,6 +79,8 @@ class Config {
         static const char* MAXIMIZE_BUTTON_ALING;
         static const char* EXIT_BUTTON_ALING;
 
+        static const char* SOCKET_NAME;
+
         //----------------------------------------------------------------------
 
         // Variables para almacenar la configuración
@@ -103,6 +105,8 @@ class Config {
 
         static QString style;
         inline static QString focusedStyle;
+
+        static QString socketName;
 
         //----------------------------------------------------------------------
 
@@ -397,6 +401,12 @@ class Config {
          * @return The style
          */
         QString getFocusedStyle() const;
+
+        /**
+         * @~english
+         * @return The socket name
+         */
+        QString getSocketName() const;
 };
 
 #endif // CONFIG_H

@@ -102,6 +102,13 @@ class XWindow : public QObject {
          */
         XWindowList     *wl;
 
+        /**
+         * @~english
+         * focus state
+         */
+        bool isFocused;
+
+
     public:
 
         /**
@@ -250,7 +257,7 @@ class XWindow : public QObject {
          * @~english
          * (un)set the focus to teh window
          */
-        void setFocus(bool focus) const;
+        void setFocus(bool focus);
 
         //----------------------------------------------------------------------
 
@@ -347,6 +354,12 @@ class XWindow : public QObject {
          * TO TRANSLATE
          */
         unsigned int getHeight() const;
+
+        /**
+         * @~english
+         * refresh the style of the border (e.g. due to a reload of config)
+         */
+        void refreshStyle();
 
     public slots:
 

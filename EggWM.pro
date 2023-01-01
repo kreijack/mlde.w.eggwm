@@ -7,7 +7,7 @@ TEMPLATE     = app
 TARGET       = eggwm
 QT          += core gui widgets
 greaterThan(QT_MAJOR_VERSION, 4) { 
-QT          += x11extras
+QT          += x11extras network
 }
 OBJECTS_DIR += build
 MOC_DIR     += build

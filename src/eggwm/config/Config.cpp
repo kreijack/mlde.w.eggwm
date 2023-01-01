@@ -58,6 +58,9 @@ const char* Config::MINIMIZE_BUTTON_ALING = "theme/minimize_button_aling";
 const char* Config::MAXIMIZE_BUTTON_ALING = "theme/maximize_button_aling";
 const char* Config::EXIT_BUTTON_ALING     = "theme/exit_button_aling";
 
+const char* Config::SOCKET_NAME           = "socket_name";
+
+
 //------------------------------------------------------------------------------
 
 bool                      Config::showIcon;
@@ -76,6 +79,7 @@ Config::Aling             Config::minimizeButtonAling;
 Config::Aling             Config::maximizeButtonAling;
 Config::Aling             Config::exitButtonAling;
 QString                   Config::style;
+QString                   Config::socketName;
 
 //------------------------------------------------------------------------------
 
@@ -120,6 +124,10 @@ void Config::loadConfig() {
     QString themeConfigPath = QDir::homePath() + THEMES_PATH + folderThemeName
             + THEME_INFO;
     QSettings themeSettings(themeConfigPath, QSettings::NativeFormat);
+    socketName = eggwmSettings.value(SOCKET_NAME, "/tmp/.eggwm.socket").toString();
+    // FIXME
+    socketName += "-";
+    socketName += getenv("DISPLAY");
 
     // Guardamos la información del tema
     showIcon            = themeSettings.value(SHOW_ICON, true).toBool();
@@ -298,4 +306,8 @@ QString Config::getStyle() const {
 
 QString Config::getFocusedStyle() const {
     return this->focusedStyle;
+}
+
+QString Config::getSocketName() const {
+    return this->socketName;
 }

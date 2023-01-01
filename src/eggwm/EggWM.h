@@ -23,6 +23,8 @@
 #include "src/eggwm/events/factory/EventFactory.h"
 #include "src/eggwm/XcbEventFilter.h"
 
+#include <QLocalServer>
+
 /**
  * @~spanish
  * Corazón del gestor de ventanas. Se encarga de procesar los distintos eventos
@@ -33,6 +35,7 @@
  * using their associated handlers.
  */
 class EggWM : public QApplication {
+    //Q_OBJECT
 
     private:
 
@@ -63,6 +66,12 @@ class EggWM : public QApplication {
          */
         EventFactory* eventFactory;
 
+        /**
+         * @~english
+         * server for receiving commands
+         */
+        QLocalServer *socketServer;
+
         //----------------------------------------------------------------------
 
         /**
@@ -91,6 +100,19 @@ class EggWM : public QApplication {
          * return true if another WM exists
          */
         bool checkAnotherWM();
+
+        /**
+         * @~english
+         * setup the socket server
+         */
+        void socketServerSetup();
+
+    private slots:
+        /**
+         * @~english
+         * command receiving
+         */
+        void socketServerReceiveCommand();
 
     public:
 

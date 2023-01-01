@@ -19,10 +19,10 @@
 // ************************************************************************** //
 
 XWindowList::XWindowList() {
-    this->clientHash   = new QHash<Window, const XWindow*>;
-    this->frameHash    = new QHash<Window, const XWindow*>;
-    this->mappingList  = new QList<const XWindow*>;
-    this->stackingList = new QList<const XWindow*>;
+    this->clientHash   = new QHash<Window, XWindow*>;
+    this->frameHash    = new QHash<Window, XWindow*>;
+    this->mappingList  = new QList<XWindow*>;
+    this->stackingList = new QList<XWindow*>;
     this->activeWindow = NULL;
 }
 
@@ -61,7 +61,7 @@ bool XWindowList::existClient(Window clientID) const {
     return this->clientHash->contains(clientID);
 }
 
-void XWindowList::addClient(Window clientID, const XWindow* xwindow) {
+void XWindowList::addClient(Window clientID, XWindow* xwindow) {
     this->clientHash->insert(clientID, xwindow);
 }
 
@@ -79,7 +79,7 @@ bool XWindowList::existFrame(Window frameID) const {
     return this->frameHash->contains(frameID);
 }
 
-void XWindowList::addFrame(Window frameID, const XWindow* xwindow) {
+void XWindowList::addFrame(Window frameID, XWindow* xwindow) {
     this->frameHash->insert(frameID, xwindow);
 }
 
@@ -93,7 +93,7 @@ XWindow* XWindowList::getXWindowByFrameID(Window frameID) const {
 
 //------------------------------------------------------------------------------
 
-void XWindowList::addToManagedWindows(const XWindow* xwindow) {
+void XWindowList::addToManagedWindows(XWindow* xwindow) {
     this->mappingList->removeOne(xwindow);
     this->mappingList->append(xwindow);
 
@@ -104,7 +104,7 @@ void XWindowList::addToManagedWindows(const XWindow* xwindow) {
     ewmhRoot.sendStackingClientList(this->stackingList);
 }
 
-void XWindowList::removeFromManagedWindow(const XWindow* xwindow) {
+void XWindowList::removeFromManagedWindow(XWindow* xwindow) {
     this->mappingList->removeOne(xwindow);
     this->stackingList->removeOne(xwindow);
 
@@ -113,7 +113,7 @@ void XWindowList::removeFromManagedWindow(const XWindow* xwindow) {
     ewmhRoot.sendStackingClientList(this->stackingList);
 }
 
-void XWindowList::restackManagedWindow(const XWindow* xwindow) {
+void XWindowList::restackManagedWindow(XWindow* xwindow) {
     this->stackingList->removeOne(xwindow);
     int numWindows = this->stackingList->size();
 
@@ -148,7 +148,7 @@ void XWindowList::restackManagedWindow(const XWindow* xwindow) {
     ewmhRoot.sendStackingClientList(this->stackingList);
 }
 
-void XWindowList::setActiveWindow(const XWindow* activeWindow) {
+void XWindowList::setActiveWindow(XWindow* activeWindow) {
 
     if (this->activeWindow)
         this->activeWindow->setFocus(false);
@@ -166,12 +166,12 @@ void XWindowList::setActiveWindow(const XWindow* activeWindow) {
     }
 }
 
-const XWindow* XWindowList::getTopWindow() const {
-    const XWindow* ret = NULL;
+XWindow* XWindowList::getTopWindow() const {
+    XWindow* ret = NULL;
     int pos = this->stackingList->size() - 1;
 
     while(pos >= 0 && ret == NULL) {
-        const XWindow* aux = this->stackingList->at(pos);
+        XWindow* aux = this->stackingList->at(pos);
 
         if(!aux->isTopWindow() && !aux->isBottomWindow()
                 && aux->getState() != IconicState)
@@ -185,4 +185,11 @@ const XWindow* XWindowList::getTopWindow() const {
 XWindowList *XWindowList::getInstance() {
     static XWindowList theXWindowList;
     return &theXWindowList;
+}
+
+void XWindowList::refreshStyle() {
+    for(int i = 0 ; i < this->mappingList->count() ; i++) {
+        auto *w = this->mappingList->at(i);
+        const_cast<XWindow *>(w)->refreshStyle();
+    }
 }

@@ -142,7 +142,7 @@ void EWMHRoot::sendSupportedHints() const {
 
 //------------------------------------------------------------------------------
 
-void EWMHRoot::sendMappingClientList(const QList<const XWindow*>* mappingList)
+void EWMHRoot::sendMappingClientList(QList<XWindow*>* mappingList)
         const {
     int numWindows = mappingList->size();
     Window array[numWindows];
@@ -155,7 +155,7 @@ void EWMHRoot::sendMappingClientList(const QList<const XWindow*>* mappingList)
             (const unsigned char*)&array, numWindows);
 }
 
-void EWMHRoot::sendStackingClientList(const QList<const XWindow*>* stackingList)
+void EWMHRoot::sendStackingClientList(QList<XWindow*>* stackingList)
         const {
     int numWindows = stackingList->size();
     Window array[numWindows];

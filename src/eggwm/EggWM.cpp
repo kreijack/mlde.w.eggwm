@@ -16,6 +16,8 @@
  */
 #include "EggWM.h"
 
+#include <QLocalSocket>
+
 // ************************************************************************** //
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
@@ -205,6 +207,7 @@ EggWM::EggWM(int argc, char** argv) : QApplication(argc, argv) {
     Config* cfg = Config::getInstance();
     cfg->loadConfig();
 
+    socketServerSetup();
     // TODO Añadir a la lista de ventanas las ventanas que ya existan
 
 
@@ -254,4 +257,62 @@ void EggWM::sendHints() {
             (long)QApplication::desktop()->height());
     ewmhRoot.sendCurrentDesktop(0.0);
     ewmhRoot.sendSupportShowingdesktop(0.0);
+}
+
+void EggWM::socketServerSetup() {
+    const auto name = Config::getInstance()->getSocketName();
+
+    socketServer = new QLocalServer(this);
+
+    socketServer->removeServer(name);
+    socketServer->listen(name);
+    connect(socketServer, &QLocalServer::newConnection, this,
+        &EggWM::socketServerReceiveCommand);
+}
+
+void EggWM::socketServerReceiveCommand() {
+    char data[1024];
+
+    auto *clientConnection = socketServer->nextPendingConnection();
+    if( !clientConnection->waitForConnected() )
+        return;
+    if( !clientConnection->waitForReadyRead() )
+        return;
+    connect(clientConnection, &QLocalSocket::disconnected,
+            clientConnection, &QLocalSocket::deleteLater);
+
+    unsigned long l = 0;
+    for(;;) {
+        auto r = clientConnection->read(data + l, 1023 - l);
+        if (r <= 0)
+            break;
+        l += r;
+    }
+
+    if (l < 1) {
+        clientConnection->disconnectFromServer();
+        return;
+    }
+
+    data[l] = 0;
+    int i = 0;
+    for (i = 0 ; data[i] && (isalnum(data[i]) || strchr("-_", data[i])); i++)
+        /* empty */;
+
+    data[i] = 0;
+    qDebug() << "received command: '" << data << "'";
+    if (!strcmp(data, "ping")) {
+        auto a = "  pong\n0:OK\n";
+        clientConnection->write(a, strlen(a));
+    } else if (!strcmp(data, "reload-config")) {
+        Config::getInstance()->loadConfig();
+        this->windowList->refreshStyle();
+        auto a = "0:OK\n";
+        clientConnection->write(a, strlen(a));
+    } else {
+        auto a = "1:ERROR:Unknown command\n";
+        clientConnection->write(a, strlen(a));
+    }
+    clientConnection->flush();
+    clientConnection->disconnectFromServer();
 }

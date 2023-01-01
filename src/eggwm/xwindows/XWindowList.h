@@ -50,7 +50,7 @@ class XWindowList {
          * @~english
          * TO TRANSLATE
          */
-        QHash<Window, const XWindow*>* clientHash;
+        QHash<Window, XWindow*>* clientHash;
 
         /**
          * @~spanish
@@ -61,7 +61,7 @@ class XWindowList {
          * @~english
          * TO TRANSLATE
          */
-        QHash<Window, const XWindow*>* frameHash;
+        QHash<Window, XWindow*>* frameHash;
 
         //----------------------------------------------------------------------
 
@@ -74,7 +74,7 @@ class XWindowList {
          * @~english
          * TO TRANSLATE
          */
-        QList<const XWindow*>* mappingList;
+        QList<XWindow*>* mappingList;
 
         /**
          * @~spanish
@@ -86,7 +86,7 @@ class XWindowList {
          * @~english
          * TO TRANSLATE
          */
-        QList<const XWindow*>* stackingList;
+        QList<XWindow*>* stackingList;
 
         /**
          * @~spanish
@@ -99,7 +99,7 @@ class XWindowList {
          * @~english
          * TO TRANSLATE
          */
-        const XWindow* activeWindow;
+        XWindow* activeWindow;
 
         //----------------------------------------------------------------------
 
@@ -129,6 +129,12 @@ class XWindowList {
          * Get the instance of this class
          */
         static XWindowList *getInstance();
+
+        /**
+         * @~english
+         * refresh the styles of teh window (e.g. after a config reload)
+         */
+        void refreshStyle();
 
         /**
          * @~spanish
@@ -162,7 +168,7 @@ class XWindowList {
          * @~english
          * TO TRANSLATE
          */
-        void addClient(Window clientID, const XWindow* xwindow);
+        void addClient(Window clientID, XWindow* xwindow);
 
         /**
          * @~spanish
@@ -208,7 +214,7 @@ class XWindowList {
          * @~english
          * TO TRANSLATE
          */
-        void addFrame(Window frameID, const XWindow* xwindow);
+        void addFrame(Window frameID, XWindow* xwindow);
 
         /**
          * @~spanish
@@ -244,7 +250,7 @@ class XWindowList {
          * @~english
          * TO TRANSLATE
          */
-        void addToManagedWindows(const XWindow* xwindow);
+        void addToManagedWindows(XWindow* xwindow);
 
         /**
          * @~spanish
@@ -256,7 +262,7 @@ class XWindowList {
          * @~english
          * TO TRANSLATE
          */
-        void removeFromManagedWindow(const XWindow* xwindow);
+        void removeFromManagedWindow(XWindow* xwindow);
 
         /**
          * @~spanish
@@ -269,7 +275,7 @@ class XWindowList {
          * @~english
          * TO TRANSLATE
          */
-        void restackManagedWindow(const XWindow* xwindow);
+        void restackManagedWindow(XWindow* xwindow);
 
         /**
          * @~spanish
@@ -281,7 +287,7 @@ class XWindowList {
          * @~english
          * TO TRANSLATE
          */
-        void setActiveWindow(const XWindow* activeWindow);
+        void setActiveWindow(XWindow* activeWindow);
 
         /**
          * @~spanish
@@ -297,7 +303,7 @@ class XWindowList {
          * @~english
          * TO TRANSLATE
          */
-        const XWindow* getTopWindow() const;
+        XWindow* getTopWindow() const;
 
 };
 

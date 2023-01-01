@@ -252,11 +252,18 @@ XID XWindow::getWindowGroup() const {
 
 //------------------------------------------------------------------------------
 
-void XWindow::setFocus(bool focus) const {
+void XWindow::setFocus(bool focus) {
     if (focus)
         this->client->setFocus();
     if (this->haveFrame())
         this->frame->setFocus(focus);
+    isFocused = focus;
+}
+
+void XWindow::refreshStyle() {
+    // This is ugly....
+    if (this->haveFrame())
+        this->frame->setFocus(isFocused);
 }
 
 //------------------------------------------------------------------------------

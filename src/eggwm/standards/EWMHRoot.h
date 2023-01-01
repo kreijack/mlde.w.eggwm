@@ -95,7 +95,7 @@ class EWMHRoot {
          * @~english
          * TO TRANSLATE
          */
-        void sendMappingClientList(const QList<const XWindow*>* mappingList)
+        void sendMappingClientList(QList<XWindow*>* mappingList)
                 const;
 
         /**
@@ -108,7 +108,7 @@ class EWMHRoot {
          * @~english
          * TO TRANSLATE
          */
-        void sendStackingClientList(const QList<const XWindow*>* stackingList)
+        void sendStackingClientList(QList<XWindow*>* stackingList)
                 const;
 
         /**

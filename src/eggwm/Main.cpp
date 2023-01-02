@@ -13,6 +13,8 @@
  */
 #include "src/eggwm/EggWM.h"
 
+#include <QCommandLineParser>
+#include <QCommandLineOption>
 /**
  * @~spanish
  * Función de inicio de Egg Window Manager.
@@ -27,8 +29,45 @@
 int main(int argc, char** argv) {
     assert(QT_VERSION >= 0x050000);
 
-    EggWM eggWM(argc, argv);
-    return eggWM.exec();
+    QApplication app(argc, argv);
+    app.setApplicationName("eggWM");
+    app.setApplicationVersion("0.3");
+
+    QCommandLineParser parser;
+    parser.setApplicationDescription("eggWM X Window Manager");
+    parser.addHelpOption();
+    parser.addVersionOption();
+
+    QCommandLineOption replaceWM("replace",
+        "Replace the currently running window manager");
+    parser.addOption(replaceWM);
+
+    QCommandLineOption socketPath("socket-path",
+        "Set an alternative socket path",
+        "socket-path");
+    parser.addOption(socketPath);
+
+    parser.process(app);
+
+    EggWM eggWM;
+
+    if (eggWM.checkAnotherWM()) {
+        if (parser.isSet(replaceWM)) {
+            qDebug() << "Detect another WM, kill it";
+            eggWM.killWM();
+        } else {
+            qDebug() << "Detect another WM, exit";
+            return 100;
+        }
+    }
+
+    if (parser.isSet(socketPath))
+        eggWM.setSocketPath(parser.value(socketPath));
+
+    if (!eggWM.init())
+        return 100;
+
+    return app.exec();
 }
 
 /*

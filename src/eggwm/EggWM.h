@@ -33,10 +33,9 @@
  * Heart of the window manager. Is responsible for process the various events
  * using their associated handlers.
  */
-class EggWM : public QApplication {
-    //Q_OBJECT
-
+class EggWM : public QObject {
     private:
+        Q_OBJECT
 
         /**
          * @~spanish
@@ -55,6 +54,12 @@ class EggWM : public QApplication {
          * List of windows managed by the WM.
          */
         XWindowList* windowList;
+
+        /**
+         * @~english
+         * Socket-path.
+         */
+        QString socketPath;
 
         /**
          * @~english
@@ -87,16 +92,14 @@ class EggWM : public QApplication {
 
         /**
          * @~english
-         * return true if another WM exists
-         */
-        bool checkAnotherWM();
-
-        /**
-         * @~english
          * setup the socket server
          */
         void socketServerSetup();
 
+        /**
+         * @~english
+         * reparent orphaned window
+         */
         void reparentOrphans();
 
     private slots:
@@ -109,17 +112,18 @@ class EggWM : public QApplication {
     public:
 
         /**
-         * @~spanish
-         * Constructor.
-         * @param argc Número de argumentos recibidos por consola.
-         * @param argv Lista de argumentos.
-         *
          * @~english
          * Constructor.
          * @param argc Number of arguments received by console.
          * @param argv Argument list.
          */
-        EggWM(int argc, char** argv);
+        EggWM();
+
+        /**
+         * @~english
+         * init of the program. May fail
+         */
+        bool init();
 
         /**
          * @~spanish
@@ -131,6 +135,25 @@ class EggWM : public QApplication {
         virtual ~EggWM();
 
         XcbEventFilter *xev;
+
+        /**
+         * @~english
+         * return true if another WM exists
+         */
+        bool checkAnotherWM();
+
+        /**
+         * @~english
+         * kill the currently running window manager
+         */
+        void killWM();
+
+        /**
+         * @~english
+         * set the socket path
+         */
+        void setSocketPath(const QString &s) { socketPath = s; }
+
 };
 
 #endif // EGGWM_H

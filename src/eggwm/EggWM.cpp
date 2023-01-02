@@ -172,8 +172,6 @@ static int errorHandler(Display* display, XErrorEvent* e) {
 }
 
 bool EggWM::checkAnotherWM() {
-    XSetErrorHandler(errorHandler);
-
     bad_alloc = false;
 
     XSelectInput(QX11Info::display(),
@@ -190,17 +188,18 @@ bool EggWM::checkAnotherWM() {
     return false;
 }
 
-EggWM::EggWM(int argc, char** argv) : QApplication(argc, argv) {
+EggWM::EggWM() {
 
-
-    if (checkAnotherWM()) {
-        qDebug() << "Detect another WM, exit";
-        ::exit(100);
-    }
+    XSetErrorHandler(errorHandler);
 
     // Inicializamos los atributos
     this->wmCheckWindow = new WMCheckWindow;
     this->windowList    = XWindowList::getInstance();
+
+    xev = new XcbEventFilter(this->windowList);
+}
+
+bool EggWM::init() {
 
     // cargamos la configuración
     Config* cfg = Config::getInstance();
@@ -223,16 +222,14 @@ EggWM::EggWM(int argc, char** argv) : QApplication(argc, argv) {
                                           ReparentNotify, GravityNotify,
                                           ConfigureNotify, CirculateNotify */
             | ButtonPressMask);        /* ButtonPress */
-    XFlush(QX11Info::display());
 
-    xev = new XcbEventFilter(this->windowList);
-    installNativeEventFilter(xev);
+    QApplication::instance()->installNativeEventFilter(xev);
 
+    return true;
 }
 
 EggWM::~EggWM() {
     delete this->wmCheckWindow;
-    delete this->windowList;
 }
 
 
@@ -259,12 +256,13 @@ void EggWM::sendHints() {
 }
 
 void EggWM::socketServerSetup() {
-    const auto name = Config::getInstance()->getSocketName();
+    if (socketPath.size() == 0)
+        socketPath = Config::getInstance()->getSocketName();
 
     socketServer = new QLocalServer(this);
 
-    socketServer->removeServer(name);
-    socketServer->listen(name);
+    socketServer->removeServer(socketPath);
+    socketServer->listen(socketPath);
     connect(socketServer, &QLocalServer::newConnection, this,
         &EggWM::socketServerReceiveCommand);
 }
@@ -402,4 +400,28 @@ void EggWM::reparentOrphans() {
 
         wl->setActiveWindow(wl->getTopWindow());
     });
+}
+
+void EggWM::killWM() {
+    auto al = AtomList::getInstance();
+
+    unsigned long* prop;
+    unsigned long num;
+
+    Atom atom;
+    int size;
+    unsigned long bytesAfter;
+
+    int ret = XGetWindowProperty(QX11Info::display(),
+            QX11Info::appRootWindow(QX11Info::appScreen()),
+            al->getAtom("_NET_SUPPORTING_WM_CHECK"),
+            0, 1, false, XA_WINDOW,
+            &atom, &size, &num,
+            &bytesAfter, (unsigned char**)&prop);
+
+    if (ret == Success) {
+        XKillClient(QX11Info::display(), prop[0]);
+    }
+    XFree(prop);
+
 }

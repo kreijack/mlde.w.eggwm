@@ -27,10 +27,10 @@ XWindowList::XWindowList() {
 }
 
 XWindowList::~XWindowList() {
-    delete this->clientHash;
+    /*delete this->clientHash;
     delete this->frameHash;
     delete this->mappingList;
-    delete this->stackingList;
+    delete this->stackingList;*/
 }
 
 

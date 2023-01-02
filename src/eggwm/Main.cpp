@@ -29,6 +29,11 @@
 int main(int argc, char** argv) {
     assert(QT_VERSION >= 0x050000);
 
+    QString display_server = getenv("DISPLAY");
+    for (int i = 1 ; i < argc -1 ; i++)
+        if (!strcmp("--display", argv[i]))
+            display_server = argv[i+1];
+
     QApplication app(argc, argv);
     app.setApplicationName("eggWM");
     app.setApplicationVersion("0.3");
@@ -63,6 +68,8 @@ int main(int argc, char** argv) {
 
     if (parser.isSet(socketPath))
         eggWM.setSocketPath(parser.value(socketPath));
+
+    eggWM.setDisplayServer(display_server);
 
     if (!eggWM.init())
         return 100;

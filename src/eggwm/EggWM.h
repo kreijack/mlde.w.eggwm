@@ -67,6 +67,12 @@ class EggWM : public QObject {
          */
         QLocalServer *socketServer;
 
+        /**
+         * @~english
+         * name of the display server
+         */
+        QString displayServer;
+
         //----------------------------------------------------------------------
 
         /**
@@ -153,6 +159,12 @@ class EggWM : public QObject {
          * set the socket path
          */
         void setSocketPath(const QString &s) { socketPath = s; }
+
+        /**
+         * @~english
+         * set display server
+         */
+        void setDisplayServer(const QString &s) { displayServer = s; }
 
 };
 

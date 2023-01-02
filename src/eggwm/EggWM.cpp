@@ -257,7 +257,8 @@ void EggWM::sendHints() {
 
 void EggWM::socketServerSetup() {
     if (socketPath.size() == 0)
-        socketPath = Config::getInstance()->getSocketName();
+        socketPath = Config::getInstance()->getSocketName() +
+            "-" + displayServer;
 
     socketServer = new QLocalServer(this);
 

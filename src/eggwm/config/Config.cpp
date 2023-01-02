@@ -125,9 +125,6 @@ void Config::loadConfig() {
             + THEME_INFO;
     QSettings themeSettings(themeConfigPath, QSettings::NativeFormat);
     socketName = eggwmSettings.value(SOCKET_NAME, "/tmp/.eggwm.socket").toString();
-    // FIXME
-    socketName += "-";
-    socketName += getenv("DISPLAY");
 
     // Guardamos la información del tema
     showIcon            = themeSettings.value(SHOW_ICON, true).toBool();

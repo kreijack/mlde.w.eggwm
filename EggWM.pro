@@ -11,7 +11,7 @@ QT          += x11extras network
 }
 OBJECTS_DIR += build
 MOC_DIR     += build
-LIBS        += -lX11
+LIBS        += -lX11 -lxcb
 //DEFINES      = QT_NO_DEBUG_OUTPUT
 
 

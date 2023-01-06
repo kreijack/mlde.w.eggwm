@@ -16,181 +16,98 @@
 #include "src/eggwm/xwindows/XWindow.h"
 #include "src/eggwm/standards/EWMHRoot.h"
 
-static const char* event_str[] = {
-    "ERROR",
-    "SUCCESS",
-    "XCB_KEY_PRESS",
-    "XCB_KEY_RELEASE",
-    "XCB_BUTTON_PRESS",
-    "XCB_BUTTON_RELEASE",
-    "XCB_MOTION_NOTIFY",
-    "XCB_ENTER_NOTIFY",
-    "XCB_LEAVE_NOTIFY",
-    "XCB_FOCUS_IN",
-    "XCB_FOCUS_OUT",
-    "XCB_KEYMAP_NOTIFY",
-    "XCB_EXPOSE",
-    "XCB_GRAPHICS_EXPOSURE",
-    "XCB_NO_EXPOSURE",
-    "XCB_VISIBILITY_NOTIFY",
-    "XCB_CREATE_NOTIFY",
-    "XCB_DESTROY_NOTIFY",
-    "XCB_UNMAP_NOTIFY",
-    "XCB_MAP_NOTIFY",
-    "XCB_MAP_REQUEST",
-    "XCB_REPARENT_NOTIFY",
-    "XCB_CONFIGURE_NOTIFY",
-    "XCB_CONFIGURE_REQUEST",
-    "XCB_GRAVITY_NOTIFY",
-    "XCB_RESIZE_REQUEST",
-    "XCB_CIRCULATE_NOTIFY",
-    "XCB_CIRCULATE_REQUEST",
-    "XCB_PROPERTY_NOTIFY",
-    "XCB_SELECTION_CLEAR",
-    "XCB_SELECTION_REQUEST",
-    "XCB_SELECTION_NOTIFY",
-    "XCB_COLORMAP_NOTIFY",
-    "XCB_CLIENT_MESSAGE",
-    "XCB_MAPPING_NOTIFY",
-    "XCB_GE_GENERIC",
-    "XCB_REQUEST",
-    "XCB_VALUE",
-    "XCB_WINDOW",
-    "XCB_PIXMAP",
-    "XCB_ATOM",
-    "XCB_CURSOR",
-    "XCB_FONT",
-    "XCB_MATCH",
-    "XCB_DRAWABLE",
-    "XCB_ACCESS",
-    "XCB_ALLOC",
-    "XCB_COLORMAP",
-    "XCB_G_CONTEXT",
-    "XCB_ID_CHOICE",
-    "XCB_NAME",
-    "XCB_LENGTH",
-    "XCB_IMPLEMENTATION",
-    "XCB_CREATE_WINDOW",
-    "XCB_CHANGE_WINDOW_ATTRIBUTES",
-    "XCB_GET_WINDOW_ATTRIBUTES",
-    "XCB_DESTROY_WINDOW",
-    "XCB_DESTROY_SUBWINDOWS",
-    "XCB_CHANGE_SAVE_SET",
-    "XCB_REPARENT_WINDOW",
-    "XCB_MAP_WINDOW",
-    "XCB_MAP_SUBWINDOWS",
-    "XCB_UNMAP_WINDOW",
-    "XCB_UNMAP_SUBWINDOWS",
-    "XCB_CONFIGURE_WINDOW",
-    "XCB_CIRCULATE_WINDOW",
-    "XCB_GET_GEOMETRY",
-    "XCB_QUERY_TREE",
-    "XCB_INTERN_ATOM",
-    "XCB_GET_ATOM_NAME",
-    "XCB_CHANGE_PROPERTY",
-    "XCB_DELETE_PROPERTY",
-    "XCB_GET_PROPERTY",
-    "XCB_LIST_PROPERTIES",
-    "XCB_SET_SELECTION_OWNER",
-    "XCB_GET_SELECTION_OWNER",
-    "XCB_CONVERT_SELECTION",
-    "XCB_SEND_EVENT",
-    "XCB_GRAB_POINTER",
-    "XCB_UNGRAB_POINTER",
-    "XCB_GRAB_BUTTON",
-    "XCB_UNGRAB_BUTTON",
-    "XCB_CHANGE_ACTIVE_POINTER_GRAB",
-    "XCB_GRAB_KEYBOARD",
-    "XCB_UNGRAB_KEYBOARD",
-    "XCB_GRAB_KEY",
-    "XCB_UNGRAB_KEY",
-    "XCB_ALLOW_EVENTS",
-    "XCB_GRAB_SERVER",
-    "XCB_UNGRAB_SERVER",
-    "XCB_QUERY_POINTER",
-    "XCB_GET_MOTION_EVENTS",
-    "XCB_TRANSLATE_COORDINATES",
-    "XCB_WARP_POINTER",
-    "XCB_SET_INPUT_FOCUS",
-    "XCB_GET_INPUT_FOCUS",
-    "XCB_QUERY_KEYMAP",
-    "XCB_OPEN_FONT",
-    "XCB_CLOSE_FONT",
-    "XCB_QUERY_FONT",
-    "XCB_QUERY_TEXT_EXTENTS",
-    "XCB_LIST_FONTS",
-    "XCB_LIST_FONTS_WITH_INFO",
-    "XCB_SET_FONT_PATH",
-    "XCB_GET_FONT_PATH",
-    "XCB_CREATE_PIXMAP",
-    "XCB_FREE_PIXMAP",
-    "XCB_CREATE_GC",
-    "XCB_CHANGE_GC",
-    "XCB_COPY_GC",
-    "XCB_SET_DASHES",
-    "XCB_SET_CLIP_RECTANGLES",
-    "XCB_FREE_GC",
-    "XCB_CLEAR_AREA",
-    "XCB_COPY_AREA",
-    "XCB_COPY_PLANE",
-    "XCB_POLY_POINT",
-    "XCB_POLY_LINE",
-    "XCB_POLY_SEGMENT",
-    "XCB_POLY_RECTANGLE",
-    "XCB_POLY_ARC",
-    "XCB_FILL_POLY",
-    "XCB_POLY_FILL_RECTANGLE",
-    "XCB_POLY_FILL_ARC",
-    "XCB_PUT_IMAGE",
-    "XCB_GET_IMAGE",
-    "XCB_POLY_TEXT_8",
-    "XCB_POLY_TEXT_16",
-    "XCB_IMAGE_TEXT_8",
-    "XCB_IMAGE_TEXT_16",
-    "XCB_CREATE_COLORMAP",
-    "XCB_FREE_COLORMAP",
-    "XCB_COPY_COLORMAP_AND_FREE",
-    "XCB_INSTALL_COLORMAP",
-    "XCB_UNINSTALL_COLORMAP",
-    "XCB_LIST_INSTALLED_COLORMAPS",
-    "XCB_ALLOC_COLOR",
-    "XCB_ALLOC_NAMED_COLOR",
-    "XCB_ALLOC_COLOR_CELLS",
-    "XCB_ALLOC_COLOR_PLANES",
-    "XCB_FREE_COLORS",
-    "XCB_STORE_COLORS",
-    "XCB_STORE_NAMED_COLOR",
-    "XCB_QUERY_COLORS",
-    "XCB_LOOKUP_COLOR",
-    "XCB_CREATE_CURSOR",
-    "XCB_CREATE_GLYPH_CURSOR",
-    "XCB_FREE_CURSOR",
-    "XCB_RECOLOR_CURSOR",
-    "XCB_QUERY_BEST_SIZE",
-    "XCB_QUERY_EXTENSION",
-    "XCB_LIST_EXTENSIONS",
-    "XCB_CHANGE_KEYBOARD_MAPPING",
-    "XCB_GET_KEYBOARD_MAPPING",
-    "XCB_CHANGE_KEYBOARD_CONTROL",
-    "XCB_GET_KEYBOARD_CONTROL",
-    "XCB_BELL",
-    "XCB_CHANGE_POINTER_CONTROL",
-    "XCB_GET_POINTER_CONTROL",
-    "XCB_SET_SCREEN_SAVER",
-    "XCB_GET_SCREEN_SAVER",
-    "XCB_CHANGE_HOSTS",
-    "XCB_LIST_HOSTS",
-    "XCB_SET_ACCESS_CONTROL",
-    "XCB_SET_CLOSE_DOWN_MODE",
-    "XCB_KILL_CLIENT",
-    "XCB_ROTATE_PROPERTIES",
-    "XCB_FORCE_SCREEN_SAVER",
-    "XCB_SET_POINTER_MAPPING",
-    "XCB_GET_POINTER_MAPPING",
-    "XCB_SET_MODIFIER_MAPPING",
-    "XCB_GET_MODIFIER_MAPPING",
-    "XCB_NO_OPERATION",
+struct EventType {
+    const char *descr;
+    unsigned long id;
 };
+static EventType event_type_list[] = {
+        {"XCB_KEY_PRESS", 2},
+        {"XCB_BUTTON_PRESS", 4},
+        {"XCB_BUTTON_RELEASE", 5},
+        {"XCB_MOTION_NOTIFY", 6},
+        {"XCB_ENTER_NOTIFY", 7},
+        {"XCB_LEAVE_NOTIFY", 8},
+        {"XCB_FOCUS_IN", 9},
+        {"XCB_FOCUS_OUT", 10},
+        {"XCB_KEYMAP_NOTIFY", 11},
+        {"XCB_EXPOSE", 12},
+        {"XCB_GRAPHICS_EXPOSURE", 13},
+        {"XCB_NO_EXPOSURE", 14},
+        {"XCB_VISIBILITY_NOTIFY", 15},
+        {"XCB_CREATE_NOTIFY", 16},
+        {"XCB_DESTROY_NOTIFY", 17},
+        {"XCB_UNMAP_NOTIFY", 18},
+        {"XCB_MAP_NOTIFY", 19},
+        {"XCB_MAP_REQUEST", 20},
+        {"XCB_REPARENT_NOTIFY", 21},
+        {"XCB_CONFIGURE_NOTIFY", 22},
+        {"XCB_CONFIGURE_REQUEST", 23},
+        {"XCB_GRAVITY_NOTIFY", 24},
+        {"XCB_RESIZE_REQUEST", 25},
+        {"XCB_CIRCULATE_NOTIFY", 26},
+        {"XCB_CIRCULATE_REQUEST", 27},
+        {"XCB_PROPERTY_NOTIFY", 28},
+        {"XCB_SELECTION_CLEAR", 29},
+        {"XCB_SELECTION_REQUEST", 30},
+        {"XCB_SELECTION_NOTIFY", 31},
+        {"XCB_COLORMAP_NOTIFY", 32},
+        {"XCB_CLIENT_MESSAGE", 33},
+        {"XCB_MAPPING_NOTIFY", 34},
+        {"XCB_GE_GENERIC", 35},
+
+        {nullptr, 0}
+};
+
+static EventType input_event_type_list[] = {
+        {"XCB_INPUT_DEVICE_CHANGED", 1},
+        {"XCB_INPUT_KEY_PRESS", 2},
+        {"XCB_INPUT_KEY_RELEASE", 3},
+        {"XCB_INPUT_BUTTON_PRESS", 4},
+        {"XCB_INPUT_BUTTON_RELEASE", 5},
+        {"XCB_INPUT_MOTION", 6},
+        {"XCB_INPUT_ENTER", 7},
+        {"XCB_INPUT_LEAVE", 8},
+        {"XCB_INPUT_FOCUS_IN", 9},
+        {"XCB_INPUT_FOCUS_OUT", 10},
+        {"XCB_INPUT_HIERARCHY", 11},
+        {"XCB_INPUT_PROPERTY", 12},
+        {"XCB_INPUT_RAW_KEY_PRESS", 13},
+        {"XCB_INPUT_RAW_KEY_RELEASE", 14},
+        {"XCB_INPUT_RAW_BUTTON_PRESS", 15},
+        {"XCB_INPUT_RAW_BUTTON_RELEASE", 16},
+        {"XCB_INPUT_RAW_MOTION", 17},
+        {"XCB_INPUT_TOUCH_BEGIN", 18},
+        {"XCB_INPUT_TOUCH_UPDATE", 19},
+        {"XCB_INPUT_TOUCH_END", 20},
+        {"XCB_INPUT_TOUCH_OWNERSHIP", 21},
+        {"XCB_INPUT_RAW_TOUCH_BEGIN", 22},
+        {"XCB_INPUT_RAW_TOUCH_UPDATE", 23},
+        {"XCB_INPUT_RAW_TOUCH_END", 24},
+        {"XCB_INPUT_BARRIER_HIT", 25},
+        {"XCB_INPUT_BARRIER_LEAVE", 26},
+        {"XCB_INPUT_GESTURE_PINCH_BEGIN", 27},
+        {"XCB_INPUT_GESTURE_PINCH_UPDATE", 28},
+        {"XCB_INPUT_GESTURE_PINCH_END", 29},
+        {"XCB_INPUT_GESTURE_SWIPE_BEGIN", 30},
+        {"XCB_INPUT_GESTURE_SWIPE_UPDATE", 31},
+        {"XCB_INPUT_GESTURE_SWIPE_END", 32},
+
+        {nullptr, 0}
+};
+
+static const char *event2Text(unsigned long id, EventType *types) {
+    static char buf[1024];
+    snprintf(buf, 1023, "<UNKNOWN event: %lu>", id);
+    const char *ret = buf;
+
+    for (int i = 0 ; types[i].descr ; i++) {
+        if (types[i].id == id) {
+            ret = types[i].descr;
+            break;
+        }
+    }
+    return ret;
+}
 
 bool XcbEventFilter::nativeEventFilter(const QByteArray &eventType, void *message, long *)
 {
@@ -198,13 +115,7 @@ bool XcbEventFilter::nativeEventFilter(const QByteArray &eventType, void *messag
 
     auto event = static_cast<xcb_generic_event_t*>(message);
 
-    /*
-    if (event->response_type < sizeof(event_str)/sizeof(event_str[0]))
-        qDebug() << "Got event" << event_str[event->response_type];
-    else
-        qDebug() << "Got UNKNOWN event" << event->response_type;
-    */
-
+    //qDebug() << "Got event " << event2Text(event->response_type, event_type_list);
     bool ret;
     switch (event->response_type) {
         case XCB_MAP_REQUEST:
@@ -232,19 +143,24 @@ bool XcbEventFilter::nativeEventFilter(const QByteArray &eventType, void *messag
             ret = false;
             break;
     }
+    xcb_allow_events (QX11Info::connection(),
+        XCB_ALLOW_REPLAY_POINTER,
+        XCB_TIME_CURRENT_TIME);
+    xcb_flush (QX11Info::connection());
     return ret;
 }
 
 bool XcbEventFilter::buttonPressHandler(xcb_generic_event_t* event)
 {
     xcb_button_press_event_t* button = reinterpret_cast<xcb_button_press_event_t*>(event);
-    Window windowID = button->root;
+    Window windowID = button->child;
     //qDebug() << "[+] ButtonPress event 0x" << hex << windowID;
     if (this->wl->existFrame(windowID)) {
         XWindow* xwindow = wl->getXWindowByFrameID(windowID);
         this->wl->restackManagedWindow(xwindow);
         this->wl->setActiveWindow(xwindow);
     }
+
     return false;
 }
 

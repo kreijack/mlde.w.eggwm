@@ -72,17 +72,6 @@ void XWindow::addFrame() {
                 cfg->getLeftBorderWidth(),
                 cfg->getTitlebarWidth() + cfg->getTopBorderWidth());
 
-        // Como ahora la ventana no es hija de la root window ya no recibimos
-        // sus eventos. Hacemos que se sigan recibiendo.
-        XSelectInput(QX11Info::display(), this->frameID,
-                  ButtonPressMask | ButtonReleaseMask | ButtonMotionMask
-                | PointerMotionMask
-                | KeyPressMask | KeyReleaseMask | KeymapStateMask
-                | EnterWindowMask | LeaveWindowMask | FocusChangeMask
-                | ExposureMask | SubstructureRedirectMask
-                | StructureNotifyMask | SubstructureNotifyMask
-                | PropertyChangeMask);
-
         // Conectamos signals y slots
         connect(this->frame, SIGNAL(resizedFrame(int, int)),
                 this, SLOT(resizedFrame(int, int)));

@@ -223,6 +223,13 @@ bool EggWM::init() {
                                           ConfigureNotify, CirculateNotify */
             | ButtonPressMask);        /* ButtonPress */
 
+    xcb_grab_button(QX11Info::connection(),
+        1,
+        QX11Info::appRootWindow(QX11Info::appScreen()),
+        XCB_EVENT_MASK_BUTTON_PRESS | XCB_EVENT_MASK_BUTTON_RELEASE,
+        XCB_GRAB_MODE_SYNC, XCB_GRAB_MODE_SYNC,
+        None, None, XCB_BUTTON_INDEX_1, XCB_MOD_MASK_ANY);
+
     QApplication::instance()->installNativeEventFilter(xev);
 
     return true;
@@ -349,6 +356,8 @@ void EggWM::reparentOrphans() {
             continue;
 
         if (this->windowList->existClient(windowID))
+            continue;
+        if (this->windowList->existFrame(windowID))
             continue;
 
         XWindow* xwindow = new XWindow(windowID);

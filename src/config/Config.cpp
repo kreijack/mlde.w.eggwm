@@ -18,76 +18,12 @@
 // **********             STATIC METHODS AND VARIABLES             ********** //
 // ************************************************************************** //
 
-Config* Config::instance = NULL;
-
-//------------------------------------------------------------------------------
-
-const char* Config::USR_CONFIG_DIR       = "/usr/share/eggwm";
-const char* Config::HOME_CONFIG_DIR      = ".eggwm";
-const char* Config::CONFIG_FILE_PATH     = "/.eggwm/eggwm.conf";
-const char* Config::USED_THEME           = "theme/name";
-
-//------------------------------------------------------------------------------
-
-const char* Config::THEMES_PATH          = "/.eggwm/themes/";
-
-//------------------------------------------------------------------------------
-
-const char* Config::THEME_INFO           = "/theme.inf";
-const char* Config::STYLE_QSS            = "/style.qss";
-const char* Config::FOCUSED_STYLE_QSS    = "/focused_style.qss";
-
-//------------------------------------------------------------------------------
-
-const char* Config::SHOW_ICON             = "theme/show_icon";
-
-const char* Config::TITLEBAR_WIDTH        = "theme/titlebar_width";
-const char* Config::TOP_BORDER_WIDTH      = "theme/top_border_width";
-const char* Config::BOTTOM_BORDER_WIDTH   = "theme/bottom_border_width";
-const char* Config::LEFT_BORDER_WIDTH     = "theme/left_border_width";
-const char* Config::RIGHT_BORDER_WIDTH    = "theme/right_border_width";
-const char* Config::ICON_SIZE             = "theme/icon_size";
-
-const char* Config::MINIMIZE_BUTTON_POS   = "theme/minimize_button_pos";
-const char* Config::MAXIMIZE_BUTTON_POS   = "theme/maximize_button_pos";
-const char* Config::EXIT_BUTTON_POS       = "theme/exit_button_pos";
-const char* Config::ICON_POS              = "theme/icon_pos";
-const char* Config::TITLE_POS             = "theme/title_pos";
-
-const char* Config::MINIMIZE_BUTTON_ALING = "theme/minimize_button_aling";
-const char* Config::MAXIMIZE_BUTTON_ALING = "theme/maximize_button_aling";
-const char* Config::EXIT_BUTTON_ALING     = "theme/exit_button_aling";
-
-const char* Config::SOCKET_NAME           = "socket_name";
-
-
-//------------------------------------------------------------------------------
-
-bool                      Config::showIcon;
-int                       Config::titlebarWidth;
-int                       Config::topBorderWidth;
-int                       Config::bottomBorderWidth;
-int                       Config::leftBorderWidth;
-int                       Config::rightBorderWidth;
-int                       Config::iconSize;
-QPair<Config::Aling, int> Config::minimizeButtonPos;
-QPair<Config::Aling, int> Config::maximizeButtonPos;
-QPair<Config::Aling, int> Config::exitButtonPos;
-QPair<Config::Aling, int> Config::iconPos;
-QPair<Config::Aling, int> Config::titlePos;
-Config::Aling             Config::minimizeButtonAling;
-Config::Aling             Config::maximizeButtonAling;
-Config::Aling             Config::exitButtonAling;
-QString                   Config::style;
-QString                   Config::socketName;
-
 //------------------------------------------------------------------------------
 
 Config* Config::getInstance() {
-    if(Config::instance == NULL) {
-        Config::instance = new Config();
-    }
-    return Config::instance;
+    static Config instance;
+
+    return &instance;
 }
 
 void Config::loadConfig() {

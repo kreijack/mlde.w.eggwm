@@ -45,68 +45,68 @@ class Config {
     private:
 
         // Constantes para acceder a la configuración
-        static const char* USR_CONFIG_DIR;
-        static const char* HOME_CONFIG_DIR;
+        static inline const char* USR_CONFIG_DIR       = "/usr/share/eggwm";
+        static inline const char* HOME_CONFIG_DIR      = ".eggwm";
 
-        static const char* CONFIG_FILE_PATH;
-        static const char* USED_THEME;
+        static inline const char* CONFIG_FILE_PATH     = "/.eggwm/eggwm.conf";
+        static inline const char* USED_THEME           = "theme/name";
 
         // Carpetas usadas por el WM
-        static const char* THEMES_PATH;
+        static inline const char* THEMES_PATH          = "/.eggwm/themes/";
 
         // Nombre de los archivos que componen el tema de ventanas
-        static const char* THEME_INFO;
-        static const char* STYLE_QSS;
-        static const char* FOCUSED_STYLE_QSS;
+        static inline const char* THEME_INFO           = "/theme.inf";
+        static inline const char* STYLE_QSS            = "/style.qss";
+        static inline const char* FOCUSED_STYLE_QSS    = "/focused_style.qss";
 
         // Constantes para acceder a las propiedades del tema de ventana
-        static const char* SHOW_ICON;
+        static inline const char* SHOW_ICON             = "theme/show_icon";
 
-        static const char* TITLEBAR_WIDTH;
-        static const char* TOP_BORDER_WIDTH;
-        static const char* BOTTOM_BORDER_WIDTH;
-        static const char* LEFT_BORDER_WIDTH;
-        static const char* RIGHT_BORDER_WIDTH;
-        static const char* ICON_SIZE;
+        static inline const char* TITLEBAR_WIDTH        = "theme/titlebar_width";
+        static inline const char* TOP_BORDER_WIDTH      = "theme/top_border_width";
+        static inline const char* BOTTOM_BORDER_WIDTH   = "theme/bottom_border_width";
+        static inline const char* LEFT_BORDER_WIDTH     = "theme/left_border_width";
+        static inline const char* RIGHT_BORDER_WIDTH    = "theme/right_border_width";
+        static inline const char* ICON_SIZE             = "theme/icon_size";
 
-        static const char* MINIMIZE_BUTTON_POS;
-        static const char* MAXIMIZE_BUTTON_POS;
-        static const char* EXIT_BUTTON_POS;
-        static const char* ICON_POS;
-        static const char* TITLE_POS;
+        static inline const char* MINIMIZE_BUTTON_POS   = "theme/minimize_button_pos";
+        static inline const char* MAXIMIZE_BUTTON_POS   = "theme/maximize_button_pos";
+        static inline const char* EXIT_BUTTON_POS       = "theme/exit_button_pos";
+        static inline const char* ICON_POS              = "theme/icon_pos";
+        static inline const char* TITLE_POS             = "theme/title_pos";
 
-        static const char* MINIMIZE_BUTTON_ALING;
-        static const char* MAXIMIZE_BUTTON_ALING;
-        static const char* EXIT_BUTTON_ALING;
+        static inline const char* MINIMIZE_BUTTON_ALING = "theme/minimize_button_aling";
+        static inline const char* MAXIMIZE_BUTTON_ALING = "theme/maximize_button_aling";
+        static inline const char* EXIT_BUTTON_ALING     = "theme/exit_button_aling";
 
-        static const char* SOCKET_NAME;
+        static inline const char* SOCKET_NAME           = "socket_name";
 
         //----------------------------------------------------------------------
 
         // Variables para almacenar la configuración
-        static bool showIcon;
+        bool showIcon;
 
-        static int titlebarWidth;
-        static int topBorderWidth;
-        static int bottomBorderWidth;
-        static int leftBorderWidth;
-        static int rightBorderWidth;
-        static int iconSize;
+        int titlebarWidth;
+        int topBorderWidth;
+        int bottomBorderWidth;
+        int leftBorderWidth;
+        int rightBorderWidth;
+        int iconSize;
 
-        static QPair<Aling, int> minimizeButtonPos;
-        static QPair<Aling, int> maximizeButtonPos;
-        static QPair<Aling, int> exitButtonPos;
-        static QPair<Aling, int> iconPos;
-        static QPair<Aling, int> titlePos;
+        QPair<Aling, int> minimizeButtonPos;
+        QPair<Aling, int> maximizeButtonPos;
+        QPair<Aling, int> exitButtonPos;
+        QPair<Aling, int> iconPos;
+        QPair<Aling, int> titlePos;
 
-        static Aling minimizeButtonAling;
-        static Aling maximizeButtonAling;
-        static Aling exitButtonAling;
+        Aling minimizeButtonAling;
+        Aling maximizeButtonAling;
+        Aling exitButtonAling;
 
-        static QString style;
-        inline static QString focusedStyle;
+        QString style;
+        QString focusedStyle;
 
-        static QString socketName;
+        QString socketName;
 
         //----------------------------------------------------------------------
 
@@ -160,15 +160,6 @@ class Config {
                 const QString& key);
 
         //----------------------------------------------------------------------
-
-        /**
-         * @~spanish
-         * Única instancia de la clase.
-         *
-         * @~english
-         * Single instance of the class.
-         */
-        static Config* instance;        
 
         // Ocultamos las constructoras
         Config(){}

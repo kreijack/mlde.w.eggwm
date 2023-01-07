@@ -26,7 +26,7 @@
 
 bool EggWM::checkAnotherWM() {
 
-    bool ret;
+    bool ret = false;
 
     uint32_t values[] = {
         XCB_EVENT_MASK_SUBSTRUCTURE_NOTIFY |    /* CreateNotify, DestroyNotify,

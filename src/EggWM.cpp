@@ -154,43 +154,37 @@ const char * requestCodeToText(unsigned char rc) {
     return names[rc];
 }
 
-static bool bad_alloc = false;
-
-static int errorHandler(Display* display, XErrorEvent* e) {
-    char txt[1024];
-    XGetErrorText(display, e->error_code, txt, sizeof(txt));
-    qDebug() << "Received X error:\n"
-         << "    Request: " << int(e->request_code)
-         << " - " << requestCodeToText(e->request_code) << "\n"
-         << "    Error code: " << int(e->error_code)
-         << " - " << txt << "\n"
-         << "    Resource ID: " << e->resourceid;
-    bad_alloc = static_cast<int>(e->error_code) == BadAccess;
-
-    // The return value is ignored.
-    return 0;
-}
-
 bool EggWM::checkAnotherWM() {
-    bad_alloc = false;
 
-    XSelectInput(QX11Info::display(),
+    bool ret;
+
+    uint32_t values[] = {
+        XCB_EVENT_MASK_SUBSTRUCTURE_NOTIFY |    /* CreateNotify, DestroyNotify,
+                                                   MapNotify, UnmapNotify,
+                                                   ReparentNotify, GravityNotify,
+                                                   ConfigureNotify, CirculateNotify */
+        XCB_EVENT_MASK_SUBSTRUCTURE_REDIRECT |  /* MapRequest, ConfigureRequest,
+                                                   CirculateRequest */
+        XCB_EVENT_MASK_BUTTON_PRESS             /* ButtonPress */
+    };
+    auto cookie = xcb_change_window_attributes_checked(QX11Info::connection(),
         QX11Info::appRootWindow(QX11Info::appScreen()),
-        SubstructureRedirectMask | SubstructureNotifyMask);
-    XSync(QX11Info::display(), false);
-
-    if (bad_alloc) {
+        XCB_CW_EVENT_MASK,
+        values);
+    if (xcb_generic_error_t *error;
+        (error = xcb_request_check(QX11Info::connection(), cookie))) {
         qDebug() << "Detected another window manager on display "
                  << XDisplayString(QX11Info::display());
-        return true;
+        ret = true;
+        free(error);
     }
 
-    return false;
+    return ret;
 }
 
 EggWM::EggWM() {
 
-    XSetErrorHandler(errorHandler);
+    //XSetErrorHandler(errorHandler);
 
     // Inicializamos los atributos
     this->wmCheckWindow = new WMCheckWindow;
@@ -211,17 +205,6 @@ bool EggWM::init() {
 
     // Establecemos diversas propiedades requeridas por el estándar EWMH
     this->sendHints();
-
-    // Establecemos que eventos queremos recibir
-    XSelectInput(QX11Info::display(),
-            QX11Info::appRootWindow(QX11Info::appScreen()),
-              SubstructureRedirectMask /* MapRequest, ConfigureRequest,
-                                          CirculateRequest */
-            | SubstructureNotifyMask   /* CreateNotify, DestroyNotify,
-                                          MapNotify, UnmapNotify,
-                                          ReparentNotify, GravityNotify,
-                                          ConfigureNotify, CirculateNotify */
-            | ButtonPressMask);        /* ButtonPress */
 
     xcb_grab_button(QX11Info::connection(),
         1,

@@ -15,6 +15,7 @@
  * @author José Expósito
  */
 #include "EggWM.h"
+#include "util/util.h"
 
 #include <QLocalSocket>
 #include <QTimer>
@@ -22,137 +23,6 @@
 // ************************************************************************** //
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
-
-const char * requestCodeToText(unsigned char rc) {
-    static const char* const names[] = {
-        "",
-        "CreateWindow",
-        "ChangeWindowAttributes",
-        "GetWindowAttributes",
-        "DestroyWindow",
-        "DestroySubwindows",
-        "ChangeSaveSet",
-        "ReparentWindow",
-        "MapWindow",
-        "MapSubwindows",
-        "UnmapWindow",
-        "UnmapSubwindows",
-        "ConfigureWindow",
-        "CirculateWindow",
-        "GetGeometry",
-        "QueryTree",
-        "InternAtom",
-        "GetAtomName",
-        "ChangeProperty",
-        "DeleteProperty",
-        "GetProperty",
-        "ListProperties",
-        "SetSelectionOwner",
-        "GetSelectionOwner",
-        "ConvertSelection",
-        "SendEvent",
-        "GrabPointer",
-        "UngrabPointer",
-        "GrabButton",
-        "UngrabButton",
-        "ChangeActivePointerGrab",
-        "GrabKeyboard",
-        "UngrabKeyboard",
-        "GrabKey",
-        "UngrabKey",
-        "AllowEvents",
-        "GrabServer",
-        "UngrabServer",
-        "QueryPointer",
-        "GetMotionEvents",
-        "TranslateCoords",
-        "WarpPointer",
-        "SetInputFocus",
-        "GetInputFocus",
-        "QueryKeymap",
-        "OpenFont",
-        "CloseFont",
-        "QueryFont",
-        "QueryTextExtents",
-        "ListFonts",
-        "ListFontsWithInfo",
-        "SetFontPath",
-        "GetFontPath",
-        "CreatePixmap",
-        "FreePixmap",
-        "CreateGC",
-        "ChangeGC",
-        "CopyGC",
-        "SetDashes",
-        "SetClipRectangles",
-        "FreeGC",
-        "ClearArea",
-        "CopyArea",
-        "CopyPlane",
-        "PolyPoint",
-        "PolyLine",
-        "PolySegment",
-        "PolyRectangle",
-        "PolyArc",
-        "FillPoly",
-        "PolyFillRectangle",
-        "PolyFillArc",
-        "PutImage",
-        "GetImage",
-        "PolyText8",
-        "PolyText16",
-        "ImageText8",
-        "ImageText16",
-        "CreateColormap",
-        "FreeColormap",
-        "CopyColormapAndFree",
-        "InstallColormap",
-        "UninstallColormap",
-        "ListInstalledColormaps",
-        "AllocColor",
-        "AllocNamedColor",
-        "AllocColorCells",
-        "AllocColorPlanes",
-        "FreeColors",
-        "StoreColors",
-        "StoreNamedColor",
-        "QueryColors",
-        "LookupColor",
-        "CreateCursor",
-        "CreateGlyphCursor",
-        "FreeCursor",
-        "RecolorCursor",
-        "QueryBestSize",
-        "QueryExtension",
-        "ListExtensions",
-        "ChangeKeyboardMapping",
-        "GetKeyboardMapping",
-        "ChangeKeyboardControl",
-        "GetKeyboardControl",
-        "Bell",
-        "ChangePointerControl",
-        "GetPointerControl",
-        "SetScreenSaver",
-        "GetScreenSaver",
-        "ChangeHosts",
-        "ListHosts",
-        "SetAccessControl",
-        "SetCloseDownMode",
-        "KillClient",
-        "RotateProperties",
-        "ForceScreenSaver",
-        "SetPointerMapping",
-        "GetPointerMapping",
-        "SetModifierMapping",
-        "GetModifierMapping",
-        "NoOperation",
-    };
-
-    if (rc < 1 || rc > (sizeof(names)/sizeof(names[0])))
-        return "<UnknownName>";
-
-    return names[rc];
-}
 
 bool EggWM::checkAnotherWM() {
 
@@ -173,10 +43,11 @@ bool EggWM::checkAnotherWM() {
         values);
     if (xcb_generic_error_t *error;
         (error = xcb_request_check(QX11Info::connection(), cookie))) {
-        qDebug() << "Detected another window manager on display "
-                 << XDisplayString(QX11Info::display());
-        ret = true;
-        free(error);
+            dumpXCBError(error);
+            qDebug() << "Detected another window manager on display "
+                     << XDisplayString(QX11Info::display());
+            ret = true;
+            free(error);
     }
 
     return ret;

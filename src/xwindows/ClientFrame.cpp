@@ -16,6 +16,7 @@
 
 #include "xwindows/XWindowList.h"
 
+#include <algorithm>
 
 // ************************************************************************** //
 // **********             STATIC METHODS AND VARIABLES             ********** //
@@ -341,20 +342,23 @@ void ClientFrame::placeInHash(const QPair<Config::Aling, int>& ip,
 void ClientFrame::placeItemsInTitlebar(QHash<int, QWidget*>* left,
         QHash<int, QWidget*>* center, QHash<int, QWidget*>* right) {
     Config* cfg  = Config::getInstance();
-    QHash<int, QWidget*>::iterator i;
 
     // Colocamos los elementos del área izquierda
     int leftMargin = cfg->getLeftBorderWidth() + 2;
-    for (i=left->begin(); i!=left->end(); i++) {
-        QWidget* w = i.value();
+    auto indexes = left->keys();
+    std::sort(indexes.begin(), indexes.end());
+    for (auto i : indexes) {
+        QWidget* w = left->value(i);
         w->move(leftMargin, w->y());
         leftMargin += w->width();
     }
 
     // Colocamos los elementos del área derecha
     int rightMargin = this->width() - cfg->getRightBorderWidth() - 2;
-    for (i=right->end()-1; i!=right->begin()-1; i--) {
-        QWidget* w = i.value();
+    indexes = right->keys();
+    std::sort(indexes.rbegin(), indexes.rend());
+    for (auto i : indexes) {
+        QWidget* w = right->value(i);
         rightMargin -= w->width();
         w->move(rightMargin, w->y());
     }
@@ -363,8 +367,10 @@ void ClientFrame::placeItemsInTitlebar(QHash<int, QWidget*>* left,
     int centralAreaSize = rightMargin - leftMargin;
 
     int centralItemsSize = 0;
-    for (i=center->begin(); i!=center->end(); i++) {
-        QWidget* w = i.value();
+    indexes = center->keys();
+    std::sort(indexes.begin(), indexes.end());
+    for (auto i : indexes) {
+        QWidget* w = center->value(i);
         centralItemsSize += w->width();
     }
 
@@ -375,8 +381,8 @@ void ClientFrame::placeItemsInTitlebar(QHash<int, QWidget*>* left,
         centralMargin = leftMargin + 5;
     }
 
-    for (i=center->begin(); i!=center->end(); i++) {
-        QWidget* w = i.value();
+    for (auto i : indexes) {
+        QWidget* w = center->value(i);
         w->move(centralMargin, w->y());
         centralMargin += w->width();
     }

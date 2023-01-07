@@ -33,7 +33,7 @@ const int ClientFrame::RIGHT_BORDER  = (1<<4);
 // ************************************************************************** //
 
 ClientFrame::ClientFrame(bool showIcon, bool showMaxButton, XWindow *xw, QWidget* parent)
-        : wl(XWindowList::getInstance()), xw(xw), QWidget(parent) {
+        : QWidget(parent), xw(xw), wl(XWindowList::getInstance()) {
     Config* cfg = Config::getInstance();
 
     // Inicializamos los atributos

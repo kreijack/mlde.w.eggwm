@@ -10,11 +10,14 @@
  * @class  XcbEventFilter
  * @author Goffredo Baroncelli
  */
+#include <xcb/xcb.h>
+
 #include "events/XcbEventFilter.h"
 
 #include "xwindows/XWindowList.h"
 #include "xwindows/XWindow.h"
 #include "standards/EWMHRoot.h"
+#include "util/util.h"
 
 struct EventType {
     const char *descr;
@@ -118,7 +121,11 @@ bool XcbEventFilter::nativeEventFilter(const QByteArray &eventType, void *messag
     if (Config::getInstance()->getDebugDumpEvents())
         qDebug() << "Got event " << event2Text(event->response_type, event_type_list);
     bool ret;
-    switch (event->response_type) {
+    switch (event->response_type & ~0x80) {
+        case 0:
+            dumpXCBError((xcb_generic_error_t*)event);
+            ret = false;
+            break;
         case XCB_MAP_REQUEST:
             ret = mapRequestHandler(event);
             break;

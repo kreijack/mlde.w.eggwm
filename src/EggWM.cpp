@@ -193,6 +193,25 @@ void EggWM::socketServerReceiveCommand() {
             clientConnection->write(a, strlen(a));
         } else if (fields[0] == "debug-dump-events" && fields.count() == 2) {
             Config::getInstance()->setDebugDumpEvents(fields[1].toInt() != 0);
+            auto a = "0:OK\n";
+            clientConnection->write(a, strlen(a));
+        } else if (fields[0] == "set-raise-on-focus" && fields.count() == 2) {
+            Config::getInstance()->setRaiseOnFocus(fields[1].toInt() != 0);
+            auto a = "0:OK\n";
+            clientConnection->write(a, strlen(a));
+        } else if (fields[0] == "set-focus-mode" && fields.count() == 2) {
+            if (fields[1] == "follow") {
+                Config::getInstance()->setFocusMode(Config::FOLLOWMOUSE);
+                auto a = "0:OK\n";
+                clientConnection->write(a, strlen(a));
+            } else if (fields[1] == "click") {
+                Config::getInstance()->setFocusMode(Config::CLICKTOFOCUS);
+                auto a = "0:OK\n";
+                clientConnection->write(a, strlen(a));
+            } else {
+                auto a = "2:ERROR:Invalid parameter\n";
+                clientConnection->write(a, strlen(a));
+            }
         } else {
             auto a = "1:ERROR:Unknown command\n";
             clientConnection->write(a, strlen(a));

@@ -13,12 +13,12 @@ OBJECTS_DIR += build
 MOC_DIR     += build
 LIBS        += -lX11 -lxcb
 //DEFINES      = QT_NO_DEBUG_OUTPUT
-
+INCLUDEPATH += $$PWD/src
 
 target.path  = /usr/bin
 config.path  = /usr/share/eggwm
-config.files = src/data/*
+config.files = data/*
 INSTALLS += target config
 
 
-include(src/eggwm/eggwm.pri)
+include(src/eggwm.pri)

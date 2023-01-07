@@ -154,7 +154,7 @@ bool XcbEventFilter::buttonPressHandler(xcb_generic_event_t* event)
 {
     xcb_button_press_event_t* button = reinterpret_cast<xcb_button_press_event_t*>(event);
     Window windowID = button->child;
-    //qDebug() << "[+] ButtonPress event 0x" << hex << windowID;
+    //qDebug() << "[+] ButtonPress event 0x" << Qt:hex << windowID;
     if (this->wl->existFrame(windowID)) {
         XWindow* xwindow = wl->getXWindowByFrameID(windowID);
         this->wl->restackManagedWindow(xwindow);
@@ -168,7 +168,7 @@ bool XcbEventFilter::clientMessageHandler(xcb_generic_event_t* event)
 {
     xcb_client_message_event_t* client = reinterpret_cast<xcb_client_message_event_t*>(event);
     Window windowID = client->window;
-    //qDebug() << "[+] ClientMessage event 0x" << hex << windowID;
+    //qDebug() << "[+] ClientMessage event 0x" << Qt::hex << windowID;
     AtomList* al = AtomList::getInstance();
     if (this->wl->existClient(windowID)) {
         XWindow* xwindow = this->wl->getXWindowByClientID(windowID);
@@ -191,7 +191,7 @@ bool XcbEventFilter::configureRequestHandler(xcb_generic_event_t* event)
 {
     xcb_configure_request_event_t *configure = reinterpret_cast<xcb_configure_request_event_t *>(event);
     Window windowID = configure->window;
-    //qDebug() << "[+] ConfigureRequest event 0x" << hex << windowID;
+    //qDebug() << "[+] ConfigureRequest event 0x" << Qt::hex << windowID;
     if (this->wl->existClient(windowID)) {
         XWindow* xwindow = this->wl->getXWindowByClientID(windowID);
         if (!xwindow->bypassWM()) {
@@ -222,7 +222,7 @@ bool XcbEventFilter::createNotifyHandler(xcb_generic_event_t* event)
 {
     xcb_create_notify_event_t* create = reinterpret_cast<xcb_create_notify_event_t*>(event);
     Window windowID = create->window;
-    //qDebug() << "[+] CreateNotify event 0x" << hex << windowID;
+    //qDebug() << "[+] CreateNotify event 0x" << Qt::hex << windowID;
     if (!this->wl->existFrame(windowID)) {
         XWindow* xwindow = new XWindow(windowID);
         this->wl->addClient(windowID, xwindow);
@@ -235,7 +235,7 @@ bool XcbEventFilter::destroyNotifyHandler(xcb_generic_event_t* event)
 {
     xcb_destroy_notify_event_t* destroy = reinterpret_cast<xcb_destroy_notify_event_t*>(event);
     Window windowID = destroy->window;
-    //qDebug() << "[+] DestroyNotify event 0x" << hex << windowID;
+    //qDebug() << "[+] DestroyNotify event 0x" << Qt::hex << windowID;
     if (this->wl->existClient(windowID)) {
         XWindow* xwindow = this->wl->getXWindowByClientID(windowID);
         wl->removeClient(xwindow->getClientID());
@@ -257,7 +257,7 @@ bool XcbEventFilter::mapRequestHandler(xcb_generic_event_t* event)
 {
     xcb_map_request_event_t* map = reinterpret_cast<xcb_map_request_event_t*>(event);
     Window windowID = map->window;
-    //qDebug() << "[+] MapRequest event 0x" << hex << windowID;
+    //qDebug() << "[+] MapRequest event 0x" << Qt::hex << windowID;
     if (this->wl->existClient(windowID)) {
         XWindow* xwindow = this->wl->getXWindowByClientID(windowID);
         if(xwindow->bypassWM()) return false;
@@ -281,7 +281,7 @@ bool XcbEventFilter::unmapNotifyHandler(xcb_generic_event_t* event)
 {
     xcb_unmap_notify_event_t* unmap = reinterpret_cast<xcb_unmap_notify_event_t*>(event);
     Window windowID = unmap->window;
-    //qDebug() << "[+] UnmapNotify event 0x" << hex << windowID;
+    //qDebug() << "[+] UnmapNotify event 0x" << Qt::hex << windowID;
     if (this->wl->existClient(windowID)) {
         XWindow* xwindow = wl->getXWindowByClientID(windowID);
         if (xwindow->getState() != IconicState) {

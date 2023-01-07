@@ -378,4 +378,5 @@ void XWindow::maximizedFrame() {
 
 void XWindow::closedFrame() {
     this->client->killClient();
+    XFlush(QX11Info::display());
 }

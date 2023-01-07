@@ -40,7 +40,9 @@ class Config {
          * the title bar (LEFT, RIGHT, CENTER) or vertical alignment of icons
          * (CENTER, TOP, BOTTOM).
          */
-        enum Aling { LEFT, RIGHT, CENTER, TOP, BOTTOM };        
+        enum Aling { LEFT, RIGHT, CENTER, TOP, BOTTOM };
+
+        enum FocusMode { CLICKTOFOCUS, FOLLOWMOUSE };
 
     private:
 
@@ -79,7 +81,12 @@ class Config {
         static inline const char* MAXIMIZE_BUTTON_ALING = "theme/maximize_button_aling";
         static inline const char* EXIT_BUTTON_ALING     = "theme/exit_button_aling";
 
-        static inline const char* SOCKET_NAME           = "socket_name";
+        static inline const char* SOCKET_NAME           = "general/socket_name";
+
+        static inline const char* FOCUS_MODE            = "general/focusMode";
+        static inline const char* RAISE_ON_FOCUS        = "general/raiseOnFocus";
+
+        static inline const char* DEBUG_DUMP_EVENTS     = "debug/dump_events";
 
         //----------------------------------------------------------------------
 
@@ -107,6 +114,11 @@ class Config {
         QString focusedStyle;
 
         QString socketName;
+
+        FocusMode focusMode;
+        bool raiseOnFocus;
+
+        bool debugDumpEvents;
 
         //----------------------------------------------------------------------
 
@@ -398,6 +410,32 @@ class Config {
          * @return The socket name
          */
         QString getSocketName() const;
+
+        /**
+         * @~english
+         * @return The focus mode (click on focus, follow mouse)
+         */
+        FocusMode getFocusMode() const;
+
+        /**
+         * @~english
+         * Returns if the window has to be raised when focused
+         * @return raiseOnFocus
+         */
+        bool getRaiseOnFocus() const;
+
+        /**
+         * @~english
+         * @return Returns if the events received have to be dumped
+         */
+        bool getDebugDumpEvents() const;
+
+        /**
+         * @~english
+         * set if the events received have to be dumped
+         */
+        void setDebugDumpEvents(bool);
+
 };
 
 #endif // CONFIG_H

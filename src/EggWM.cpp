@@ -300,26 +300,29 @@ void EggWM::socketServerReceiveCommand() {
     }
 
     data[l] = 0;
-    int i = 0;
-    for (i = 0 ; data[i] && (isalnum(data[i]) || strchr("-_", data[i])); i++)
-        /* empty */;
+    auto fields = QString(data).trimmed().split(" ");
 
-    data[i] = 0;
-    //qDebug() << "received command: '" << data << "'";
-    if (!strcmp(data, "ping")) {
-        auto a = "  pong\n0:OK\n";
-        clientConnection->write(a, strlen(a));
-    } else if (!strcmp(data, "reparent-orphans")) {
-        reparentOrphans();
-        auto a = "  pong\n0:OK\n";
-        clientConnection->write(a, strlen(a));
-    } else if (!strcmp(data, "reload-config")) {
-        Config::getInstance()->loadConfig();
-        this->windowList->refreshStyle();
-        auto a = "0:OK\n";
-        clientConnection->write(a, strlen(a));
+    if (fields.count() > 0) {
+        if (fields[0] == "ping") {
+            auto a = "  pong\n0:OK\n";
+            clientConnection->write(a, strlen(a));
+        } else if (fields[0] == "reparent-orphans") {
+            reparentOrphans();
+            auto a = "  pong\n0:OK\n";
+            clientConnection->write(a, strlen(a));
+        } else if (fields[0] == "reload-config") {
+            Config::getInstance()->loadConfig();
+            this->windowList->refreshStyle();
+            auto a = "0:OK\n";
+            clientConnection->write(a, strlen(a));
+        } else if (fields[0] == "debug-dump-events" && fields.count() == 2) {
+            Config::getInstance()->setDebugDumpEvents(fields[1].toInt() != 0);
+        } else {
+            auto a = "1:ERROR:Unknown command\n";
+            clientConnection->write(a, strlen(a));
+        }
     } else {
-        auto a = "1:ERROR:Unknown command\n";
+        auto a = "2:ERROR:Empty command\n";
         clientConnection->write(a, strlen(a));
     }
     clientConnection->flush();

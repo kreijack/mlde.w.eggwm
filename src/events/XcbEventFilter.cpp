@@ -115,7 +115,8 @@ bool XcbEventFilter::nativeEventFilter(const QByteArray &eventType, void *messag
 
     auto event = static_cast<xcb_generic_event_t*>(message);
 
-    //qDebug() << "Got event " << event2Text(event->response_type, event_type_list);
+    if (Config::getInstance()->getDebugDumpEvents())
+        qDebug() << "Got event " << event2Text(event->response_type, event_type_list);
     bool ret;
     switch (event->response_type) {
         case XCB_MAP_REQUEST:

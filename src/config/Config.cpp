@@ -62,6 +62,18 @@ void Config::loadConfig() {
     QSettings themeSettings(themeConfigPath, QSettings::NativeFormat);
     socketName = eggwmSettings.value(SOCKET_NAME, "/tmp/.eggwm.socket").toString();
 
+    auto focusMode_ = eggwmSettings.value(RAISE_ON_FOCUS, "click").toString();
+    if (focusMode_ == "click_to_focus")
+        focusMode = CLICKTOFOCUS;
+    else if (focusMode_ == "follow_mouse")
+        focusMode = FOLLOWMOUSE;
+    else
+        focusMode = CLICKTOFOCUS;
+
+    raiseOnFocus = eggwmSettings.value(RAISE_ON_FOCUS, false).toBool();
+
+    debugDumpEvents = eggwmSettings.value(DEBUG_DUMP_EVENTS, false).toBool();
+
     // Guardamos la información del tema
     showIcon            = themeSettings.value(SHOW_ICON, true).toBool();
 
@@ -243,4 +255,20 @@ QString Config::getFocusedStyle() const {
 
 QString Config::getSocketName() const {
     return this->socketName;
+}
+
+Config::FocusMode Config::getFocusMode() const {
+    return this->focusMode;
+}
+
+bool Config::getRaiseOnFocus() const {
+    return this->raiseOnFocus;
+}
+
+bool Config::getDebugDumpEvents() const {
+    return this->debugDumpEvents;
+}
+
+void Config::setDebugDumpEvents(bool v) {
+    this->debugDumpEvents = v;
 }

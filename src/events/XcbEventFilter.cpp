@@ -147,6 +147,9 @@ bool XcbEventFilter::nativeEventFilter(const QByteArray &eventType, void *messag
         case XCB_CLIENT_MESSAGE:
             ret = clientMessageHandler(event);
             break;
+        case XCB_ENTER_NOTIFY:
+            ret = enterNotifyHandler(event);
+            break;
         default:
             ret = false;
             break;
@@ -163,11 +166,20 @@ bool XcbEventFilter::buttonPressHandler(xcb_generic_event_t* event)
     xcb_button_press_event_t* button = reinterpret_cast<xcb_button_press_event_t*>(event);
     Window windowID = button->child;
     //qDebug() << "[+] ButtonPress event 0x" << Qt:hex << windowID;
-    if (this->wl->existFrame(windowID)) {
-        XWindow* xwindow = wl->getXWindowByFrameID(windowID);
-        this->wl->restackManagedWindow(xwindow);
+
+    if (Config::getInstance()->getFocusMode() != Config::CLICKTOFOCUS)
+        return false;
+
+    if (!this->wl->existFrame(windowID))
+        return false;
+
+    XWindow* xwindow = wl->getXWindowByFrameID(windowID);
+    if (!this->wl->isFocused(xwindow))
         this->wl->setActiveWindow(xwindow);
-    }
+
+    if(Config::getInstance()->getRaiseOnFocus() &&
+       !this->wl->isTopWindow(xwindow))
+            this->wl->restackManagedWindow(xwindow);
 
     return false;
 }
@@ -298,5 +310,30 @@ bool XcbEventFilter::unmapNotifyHandler(xcb_generic_event_t* event)
         }
         this->wl->setActiveWindow(this->wl->getTopWindow());
     }
+    return false;
+}
+
+bool XcbEventFilter::enterNotifyHandler(xcb_generic_event_t* event)
+{
+    auto enter = reinterpret_cast<xcb_enter_notify_event_t*>(event);
+    Window windowID = enter->event;
+    qDebug() << "[+] EnterNotify event 0x" << Qt::hex << windowID;
+
+    if (Config::getInstance()->getFocusMode() != Config::FOLLOWMOUSE)
+        return false;
+
+    if (!this->wl->existFrame(windowID))
+        return false;
+
+    XWindow* xwindow = wl->getXWindowByFrameID(windowID);
+    if (this->wl->isFocused(xwindow))
+        return false;
+
+    this->wl->setActiveWindow(xwindow);
+
+    if (Config::getInstance()->getRaiseOnFocus() &&
+        !this->wl->isTopWindow(xwindow))
+                this->wl->restackManagedWindow(xwindow);
+
     return false;
 }

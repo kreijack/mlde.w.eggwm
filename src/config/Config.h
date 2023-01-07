@@ -419,10 +419,22 @@ class Config {
 
         /**
          * @~english
+         * Set the focus mode (click on focus, follow mouse)
+         */
+        void setFocusMode(FocusMode);
+
+        /**
+         * @~english
          * Returns if the window has to be raised when focused
          * @return raiseOnFocus
          */
         bool getRaiseOnFocus() const;
+
+        /**
+         * @~english
+         * Set if the window has to be raised when focused
+         */
+        void setRaiseOnFocus(bool c);
 
         /**
          * @~english

@@ -305,6 +305,22 @@ class XWindowList {
          */
         XWindow* getTopWindow() const;
 
+        /**
+         * @~english
+         * Check if a window is already in the above over all others
+         * @param w     window to test
+         * @return      return true if the window is above over all other
+         */
+        bool isTopWindow(XWindow* w);
+
+        /**
+         * @~english
+         * Check if a window is already focused
+         * @param w     window to test
+         * @return      return true if the window is focused
+         */
+        bool isFocused(XWindow* w);
+
 };
 
 #endif // XWINDOWLIST_H

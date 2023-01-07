@@ -70,7 +70,7 @@ void Config::loadConfig() {
     else
         focusMode = CLICKTOFOCUS;
 
-    raiseOnFocus = eggwmSettings.value(RAISE_ON_FOCUS, false).toBool();
+    raiseOnFocus = eggwmSettings.value(RAISE_ON_FOCUS, true).toBool();
 
     debugDumpEvents = eggwmSettings.value(DEBUG_DUMP_EVENTS, false).toBool();
 
@@ -261,8 +261,16 @@ Config::FocusMode Config::getFocusMode() const {
     return this->focusMode;
 }
 
+void Config::setFocusMode(FocusMode f) {
+    this->focusMode = f;
+}
+
 bool Config::getRaiseOnFocus() const {
     return this->raiseOnFocus;
+}
+
+void Config::setRaiseOnFocus(bool v) {
+    this->raiseOnFocus = v;
 }
 
 bool Config::getDebugDumpEvents() const {

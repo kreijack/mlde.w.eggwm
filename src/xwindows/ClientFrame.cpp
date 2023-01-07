@@ -406,8 +406,9 @@ bool ClientFrame::isClicked(QPoint clickPosition, const QLabel* label) const {
 // ************************************************************************** //
 
 void ClientFrame::mousePressEvent(QMouseEvent* event) {
-    this->wl->restackManagedWindow(this->xw);
-    this->wl->setActiveWindow(this->xw);
+    if (!this->wl->isTopWindow(this->xw))
+        this->wl->restackManagedWindow(this->xw);
+    //this->wl->setActiveWindow(this->xw);
     this->clickPosition =  event->pos();
 
     // Barra de título

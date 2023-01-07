@@ -41,4 +41,5 @@ private:
     bool destroyNotifyHandler(xcb_generic_event_t* event);
     bool mapRequestHandler(xcb_generic_event_t* event);
     bool unmapNotifyHandler(xcb_generic_event_t* event);
+    bool enterNotifyHandler(xcb_generic_event_t* event);
 };   

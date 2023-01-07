@@ -182,6 +182,14 @@ XWindow* XWindowList::getTopWindow() const {
     return ret;
 }
 
+bool XWindowList::isTopWindow(XWindow* w) {
+    return w == this->getTopWindow();
+}
+
+bool XWindowList::isFocused(XWindow* w) {
+    return w == this->activeWindow;
+}
+
 XWindowList *XWindowList::getInstance() {
     static XWindowList theXWindowList;
     return &theXWindowList;

@@ -77,6 +77,28 @@ bool EggWM::init() {
     // Establecemos diversas propiedades requeridas por el estándar EWMH
     this->sendHints();
 
+    uint32_t values[] = {
+        XCB_EVENT_MASK_SUBSTRUCTURE_NOTIFY |    /* CreateNotify, DestroyNotify,
+                                                   MapNotify, UnmapNotify,
+                                                   ReparentNotify, GravityNotify,
+                                                   ConfigureNotify, CirculateNotify */
+        XCB_EVENT_MASK_SUBSTRUCTURE_REDIRECT |  /* MapRequest, ConfigureRequest,
+                                                   CirculateRequest */
+        XCB_EVENT_MASK_BUTTON_PRESS             /* ButtonPress */
+    };
+    auto cookie = xcb_change_window_attributes_checked(QX11Info::connection(),
+        QX11Info::appRootWindow(QX11Info::appScreen()),
+        XCB_CW_EVENT_MASK,
+        values);
+    if (xcb_generic_error_t *error;
+        (error = xcb_request_check(QX11Info::connection(), cookie))) {
+        qDebug() << "Cannot reset window attribute"
+                 << XDisplayString(QX11Info::display());
+        dumpXCBError(error);
+        free(error);
+        ::exit(100);
+    }
+
     xcb_grab_button(QX11Info::connection(),
         1,
         QX11Info::appRootWindow(QX11Info::appScreen()),

@@ -22,10 +22,12 @@ More info at the [docs] directory please for testing see [docs/READMEinstall.md]
 
 ## Status
 
-Currently working and tested, but project are staled due lack of manpowers, 
-if interesting please contact at the mail list in moonlightde:
+This was an update of the project mlde-eggwm, awhi is base by the work of
+- Jose Exposito  (see https://github.com/JoseExposito/eggwm)
+- Leslie Zhai (see https://notabug.org/tux_peng/eggwm)
+- mckaygerhard (see https://github.com/MoonLightDE/mlde.w.eggwm)
 
-[Mail list: moonlightde@googlegroups.com](https://groups.google.com/d/forum/moonlightde) Archived but still receive mails.
+Currently working and tested, but project are staled due lack of manpowers.
 
 ## LICENSE
 

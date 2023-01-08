@@ -1,4 +1,14 @@
-
+/**
+ * Copyright (C) 2023 Goffredo Baroncelli <kreijack@libero.it>
+ *
+ * @file util/util.cpp
+ *
+ * @~english
+ * This file is part of the Egg Window Manager project, you can redistribute it
+ * and/or modify it under the terms of the GNU GPL v3.
+ *
+ * @author Goffredo Baroncelli
+ */
 #include <QDebug>
 #include "util/util.h"
 

@@ -22,7 +22,7 @@ More info at the [docs] directory please for testing see [docs/READMEinstall.md]
 
 ## Status
 
-This was an update of the project mlde-eggwm, awhi is base by the work of
+This was an update of the project mlde-eggwm, which is base by the work of
 - Jose Exposito  (see https://github.com/JoseExposito/eggwm)
 - Leslie Zhai (see https://notabug.org/tux_peng/eggwm)
 - mckaygerhard (see https://github.com/MoonLightDE/mlde.w.eggwm)
